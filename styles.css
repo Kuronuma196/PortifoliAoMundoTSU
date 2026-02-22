@@ -68,3 +68,18 @@ p { color: var(--muted); }
   .menu-links a:not(.button) { display:none; }
   .slide-frame-wrap iframe { min-height:420px; }
 }
+
+.section-gap { margin-top: 3rem; }
+.project-card img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  margin-bottom: 0.8rem;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+}
+.meta {
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0.3rem 0 0.4rem;
+}
