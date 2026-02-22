@@ -19,6 +19,7 @@
         <a href="noticias.html">Notícias</a>
         <a href="analises.html">Análises</a>
         <a class="active" href="acesso.html">Acesso</a>
+        <a href="painel.html">Painel</a>
         <a class="button ghost" href="contato.html">Contato</a>
       </div>
     </nav>
@@ -26,7 +27,7 @@
     <header class="page-hero container">
       <p class="breadcrumb">Início / Acesso</p>
       <h1>Conta Google + Perfis de Usuário</h1>
-      <p>Faça login com Google e selecione seu tipo de participação no TSU.</p>
+      <p>Faça login com Google, escolha seu perfil e envie sua solicitação.</p>
     </header>
 
     <main class="section container">
@@ -43,11 +44,11 @@
       <section class="section-gap">
         <h2>Tipos de usuário</h2>
         <div class="grid two">
-          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em processos seletivos do projeto geral ou projetos individuais. Recebe avisos de vagas abertas (quando houver).</p></article>
-          <article class="panel role-card"><h3>Cliente</h3><p>Solicita prestação de serviços e envia briefing para abertura de novos projetos.</p></article>
-          <article class="panel role-card"><h3>Avaliador</h3><p>Comenta, critica, avalia e sugere melhorias para conteúdos e projetos publicados.</p></article>
-          <article class="panel role-card"><h3>Funcionário</h3><p>Conta interna validada por whitelist de e-mails Google autorizados (inclui o fundador).</p></article>
-          <article class="panel role-card"><h3>Criador</h3><p>Submete personagens, histórias, nomes, logos e identidades visuais, sujeitos a curadoria e repaginagem.</p></article>
+          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em seleções (no momento sem vagas abertas).</p></article>
+          <article class="panel role-card"><h3>Cliente</h3><p>Solicita prestação de serviços e briefing de novo projeto.</p></article>
+          <article class="panel role-card"><h3>Avaliador</h3><p>Comenta, critica e sugere melhorias estruturadas.</p></article>
+          <article class="panel role-card"><h3>Funcionário</h3><p>Perfil interno validado por whitelist de e-mail Google.</p></article>
+          <article class="panel role-card"><h3>Criador</h3><p>Submete proposta de personagem, história, nome, logo e identidade visual.</p></article>
         </div>
       </section>
 
@@ -69,6 +70,17 @@
         </div>
         <button id="save-prefs" class="button" type="button" data-track="save_prefs_click">Salvar preferências</button>
         <p id="role-feedback" class="small-note"></p>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Solicitação por perfil</h2>
+        <p id="request-intro" class="small-note">Selecione um perfil para habilitar este formulário.</p>
+        <form id="role-request-form" class="stack-form">
+          <input id="request-title" class="role-select" type="text" placeholder="Título da solicitação" required />
+          <textarea id="request-description" class="role-select" rows="5" placeholder="Descreva sua solicitação" required></textarea>
+          <button class="button" type="submit" data-track="role_request_submit">Enviar solicitação</button>
+        </form>
+        <p id="request-feedback" class="small-note"></p>
       </section>
     </main>
 
