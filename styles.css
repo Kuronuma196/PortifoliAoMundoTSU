@@ -83,3 +83,17 @@ p { color: var(--muted); }
   font-weight: 600;
   margin: 0.3rem 0 0.4rem;
 }
+
+.role-select {
+  width: min(420px, 100%);
+  margin-top: 0.5rem;
+  padding: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0d1430;
+  color: var(--text);
+}
+
+.role-card h3 {
+  margin-bottom: 0.4rem;
+}

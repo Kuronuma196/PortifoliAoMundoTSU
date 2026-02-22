@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso e Login | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a>
+        <a href="personagens.html">Personagens</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="cronologia.html">Cronologia</a>
+        <a href="galeria.html">Galeria</a>
+        <a href="sobre.html">Sobre</a>
+        <a class="active" href="acesso.html">Acesso</a>
+        <a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Acesso</p>
+      <h1>Login com conta Google</h1>
+      <p>Selecione seu tipo de usuário para receber recursos e comunicações adequadas ao seu perfil.</p>
+    </header>
+
+    <main class="section container">
+      <section class="panel">
+        <h2>Entrar</h2>
+        <p>O login utiliza autenticação Google (Firebase Authentication).</p>
+        <button id="google-login" class="button">Entrar com Google</button>
+        <button id="logout" class="button ghost" type="button">Sair</button>
+        <p id="auth-status" class="small-note">Nenhum usuário autenticado.</p>
+      </section>
+
+      <section class="section-gap">
+        <h2>Tipos de usuário</h2>
+        <div class="grid two">
+          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em processos seletivos de participação no projeto geral ou projetos individuais. Pode receber notificações por e-mail quando novas vagas forem abertas.</p></article>
+          <article class="panel role-card"><h3>Cliente</h3><p>Voltado para contratação de prestação de serviços e envio de mensagens para abertura de futuro projeto.</p></article>
+          <article class="panel role-card"><h3>Avaliador</h3><p>Pode comentar, criticar, avaliar e sugerir melhorias para projetos e materiais publicados.</p></article>
+          <article class="panel role-card"><h3>Funcionário</h3><p>Conta destinada a colaboradores internos. O e-mail Google é validado em uma lista de e-mails autorizados.</p></article>
+          <article class="panel role-card"><h3>Criador</h3><p>Para quem deseja ser representado no universo TSU ou criar personagens, histórias, logos, nomes e identidades visuais, sujeito a repaginagem editorial.</p></article>
+        </div>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Selecionar perfil ativo</h2>
+        <label for="role-select">Tipo de usuário</label>
+        <select id="role-select" class="role-select">
+          <option value="">Selecione...</option>
+          <option value="candidato">Candidato</option>
+          <option value="cliente">Cliente</option>
+          <option value="avaliador">Avaliador</option>
+          <option value="funcionario">Funcionário</option>
+          <option value="criador">Criador</option>
+        </select>
+        <p id="role-feedback" class="small-note"></p>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+  </body>
+</html>
