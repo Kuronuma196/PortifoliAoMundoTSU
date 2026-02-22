@@ -1,0 +1,15 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0D2B32"/>
+      <stop offset="100%" stop-color="#08151F"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" rx="36" fill="url(#bg3)"/>
+  <circle cx="450" cy="280" r="150" fill="#66F0D9" fill-opacity="0.25"/>
+  <circle cx="450" cy="270" r="88" fill="#EFFFFA"/>
+  <path d="M310 500 L590 500 L550 820 L350 820 Z" fill="#D1FFF3"/>
+  <rect x="250" y="860" width="400" height="180" rx="28" fill="#0C2430" stroke="#2E6C7A"/>
+  <text x="450" y="955" text-anchor="middle" fill="#D7FFF6" font-size="64" font-family="Segoe UI" font-weight="700">NOX</text>
+  <text x="450" y="1005" text-anchor="middle" fill="#8FFBE7" font-size="28" font-family="Segoe UI">Operador de Campo</text>
+</svg>

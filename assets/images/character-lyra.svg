@@ -1,0 +1,16 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2B195F"/>
+      <stop offset="100%" stop-color="#120B2B"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" rx="36" fill="url(#bg2)"/>
+  <circle cx="450" cy="280" r="155" fill="#C292FF" fill-opacity="0.26"/>
+  <circle cx="450" cy="270" r="92" fill="#FCF5FF"/>
+  <path d="M260 540 C340 430, 560 430, 640 540 L580 820 L320 820 Z" fill="#F0DFFF"/>
+  <path d="M260 525 C340 450, 560 450, 640 525" stroke="#C292FF" stroke-width="22" fill="none"/>
+  <rect x="250" y="860" width="400" height="180" rx="28" fill="#201040" stroke="#56308F"/>
+  <text x="450" y="955" text-anchor="middle" fill="#F2E7FF" font-size="64" font-family="Segoe UI" font-weight="700">LYRA</text>
+  <text x="450" y="1005" text-anchor="middle" fill="#D8B9FF" font-size="28" font-family="Segoe UI">Analista Interdimensional</text>
+</svg>

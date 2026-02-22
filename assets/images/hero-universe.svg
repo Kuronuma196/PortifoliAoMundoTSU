@@ -1,0 +1,16 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="700" rx="28" fill="#0D1430"/>
+  <circle cx="210" cy="160" r="90" fill="#5DC7FF" fill-opacity="0.18"/>
+  <circle cx="980" cy="540" r="140" fill="#7F8CFF" fill-opacity="0.15"/>
+  <circle cx="600" cy="330" r="180" fill="#5DC7FF" fill-opacity="0.1"/>
+  <g fill="#EAF0FF" fill-opacity="0.9">
+    <circle cx="170" cy="90" r="2"/><circle cx="350" cy="100" r="2"/><circle cx="420" cy="210" r="2"/>
+    <circle cx="560" cy="130" r="2"/><circle cx="700" cy="80" r="2"/><circle cx="860" cy="140" r="2"/>
+    <circle cx="960" cy="220" r="2"/><circle cx="1040" cy="330" r="2"/><circle cx="930" cy="430" r="2"/>
+    <circle cx="770" cy="500" r="2"/><circle cx="640" cy="560" r="2"/><circle cx="520" cy="500" r="2"/>
+    <circle cx="400" cy="590" r="2"/><circle cx="300" cy="500" r="2"/><circle cx="220" cy="410" r="2"/>
+  </g>
+  <rect x="120" y="470" width="440" height="90" rx="14" fill="#111C43" stroke="#2A3A78"/>
+  <text x="150" y="526" fill="#EAF0FF" font-family="Segoe UI, Arial" font-size="32" font-weight="700">Tear's Studios Universe</text>
+  <text x="150" y="405" fill="#9EDCFF" font-family="Segoe UI, Arial" font-size="20">Portal oficial em construção</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="900" height="1200" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#13245A"/>
+      <stop offset="100%" stop-color="#0B1330"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" rx="36" fill="url(#bg)"/>
+  <circle cx="450" cy="280" r="150" fill="#74D9FF" fill-opacity="0.25"/>
+  <path d="M300 480 L450 380 L600 480 L560 820 L340 820 Z" fill="#DDF1FF"/>
+  <circle cx="450" cy="270" r="90" fill="#F6FCFF"/>
+  <rect x="250" y="860" width="400" height="180" rx="28" fill="#111B43" stroke="#2F4B94"/>
+  <text x="450" y="955" text-anchor="middle" fill="#C8E8FF" font-size="64" font-family="Segoe UI" font-weight="700">AEGIS</text>
+  <text x="450" y="1005" text-anchor="middle" fill="#8ED6FF" font-size="28" font-family="Segoe UI">Guardião Estratégico</text>
+</svg>
