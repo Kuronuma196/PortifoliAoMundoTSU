@@ -1,15 +1,19 @@
 <svg width="900" height="1200" viewBox="0 0 900 1200" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#13245A"/>
-      <stop offset="100%" stop-color="#0B1330"/>
+      <stop offset="0%" stop-color="#5A430F"/>
+      <stop offset="100%" stop-color="#1F1605"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFE9A6"/>
+      <stop offset="100%" stop-color="#E1A928"/>
     </linearGradient>
   </defs>
   <rect width="900" height="1200" rx="36" fill="url(#bg)"/>
-  <circle cx="450" cy="280" r="150" fill="#74D9FF" fill-opacity="0.25"/>
-  <path d="M300 480 L450 380 L600 480 L560 820 L340 820 Z" fill="#DDF1FF"/>
-  <circle cx="450" cy="270" r="90" fill="#F6FCFF"/>
-  <rect x="250" y="860" width="400" height="180" rx="28" fill="#111B43" stroke="#2F4B94"/>
-  <text x="450" y="955" text-anchor="middle" fill="#C8E8FF" font-size="64" font-family="Segoe UI" font-weight="700">AEGIS</text>
-  <text x="450" y="1005" text-anchor="middle" fill="#8ED6FF" font-size="28" font-family="Segoe UI">Guardião Estratégico</text>
+  <circle cx="450" cy="250" r="190" fill="#FFF3C8" fill-opacity="0.2"/>
+  <path d="M250 520 L450 400 L650 520 L600 920 L300 920 Z" fill="url(#gold)" fill-opacity="0.95"/>
+  <circle cx="450" cy="255" r="92" fill="#FBE9B0"/>
+  <path d="M350 600 L550 600 L520 760 L380 760 Z" fill="#7A5A18"/>
+  <rect x="220" y="960" width="460" height="160" rx="24" fill="#2C2008" stroke="#D7A73A"/>
+  <text x="450" y="1045" text-anchor="middle" fill="#FFE8A0" font-size="68" font-family="Segoe UI" font-weight="700">AEGIS</text>
 </svg>
