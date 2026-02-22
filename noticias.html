@@ -10,48 +10,39 @@
     <nav class="topbar container">
       <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
       <div class="menu-links">
-        <a href="index.html">Início</a>
-        <a href="personagens.html">Personagens</a>
-        <a href="projetos.html">Projetos</a>
-        <a href="cronologia.html">Cronologia</a>
-        <a href="galeria.html">Galeria</a>
-        <a href="sobre.html">Sobre</a>
-        <a class="active" href="noticias.html">Notícias</a>
-        <a href="analises.html">Análises</a>
-        <a href="acesso.html">Acesso</a>
-        <a class="button ghost" href="contato.html">Contato</a>
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a class="active" href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a class="button ghost" href="contato.html">Contato</a>
       </div>
     </nav>
 
     <header class="page-hero container">
       <p class="breadcrumb">Início / Notícias</p>
       <h1>Notícias e Atualizações</h1>
-      <p>Canal de compartilhamento das novidades oficiais do projeto geral e dos projetos individuais.</p>
+      <p>Atualizações oficiais + espaço de sugestões da comunidade.</p>
     </header>
 
     <main class="section container">
       <div class="grid two">
-        <article class="panel news-card">
-          <p class="meta">22/02/2026 • Institucional</p>
-          <h3>Portal TSU evolui para estrutura multipágina</h3>
-          <p>Publicação das áreas de personagens, projetos, cronologia, galeria, notícias, análises e acesso com login.</p>
-          <div class="hero-actions">
-            <button class="button ghost share-btn" data-title="Portal TSU evolui para estrutura multipágina" data-track="share_news">Compartilhar notícia</button>
-          </div>
-        </article>
-
-        <article class="panel news-card">
-          <p class="meta">22/02/2026 • Comunidade</p>
-          <h3>Perfis de usuário disponíveis para participação</h3>
-          <p>Tipos Candidato, Cliente, Avaliador, Funcionário e Criador foram formalizados na nova área de acesso.</p>
-          <div class="hero-actions">
-            <button class="button ghost share-btn" data-title="Perfis de usuário disponíveis para participação" data-track="share_news">Compartilhar notícia</button>
-          </div>
-        </article>
+        <article class="panel news-card"><p class="meta">22/02/2026 • Institucional</p><h3>Portal TSU evolui para estrutura multipágina</h3><p>Publicação das áreas de personagens, projetos, cronologia, galeria, notícias, análises e acesso com login.</p><div class="hero-actions"><button class="button ghost share-btn" data-title="Portal TSU evolui para estrutura multipágina" data-track="share_news">Compartilhar notícia</button></div></article>
+        <article class="panel news-card"><p class="meta">22/02/2026 • Comunidade</p><h3>Perfis de usuário disponíveis para participação</h3><p>Tipos Candidato, Cliente, Avaliador, Funcionário e Criador formalizados na nova área de acesso.</p><div class="hero-actions"><button class="button ghost share-btn" data-title="Perfis de usuário disponíveis para participação" data-track="share_news">Compartilhar notícia</button></div></article>
       </div>
+
+      <section class="section-gap panel">
+        <h2>Enviar sugestão de notícia</h2>
+        <form id="news-form" class="stack-form">
+          <input id="news-title" class="role-select" type="text" placeholder="Título da sugestão" required />
+          <textarea id="news-summary" class="role-select" rows="4" placeholder="Resumo da sugestão" required></textarea>
+          <button class="button" type="submit" data-track="news_suggestion_submit">Salvar sugestão</button>
+        </form>
+      </section>
+
+      <section class="section-gap">
+        <h2>Últimas sugestões da comunidade</h2>
+        <div id="community-news-list" class="grid two"></div>
+      </section>
     </main>
 
     <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
     <script src="script.js"></script>
+    <script src="site.js"></script>
   </body>
 </html>

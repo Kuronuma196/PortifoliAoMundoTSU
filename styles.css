@@ -136,3 +136,20 @@ p { color: var(--muted); }
 .event-table th {
   color: var(--text);
 }
+
+.stack-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.active-chip {
+  box-shadow: 0 0 0 2px rgba(93, 199, 255, 0.4) inset;
+}
+
+.project-item {
+  transition: transform 0.15s ease;
+}
+
+.project-item:hover {
+  transform: translateY(-2px);
+}

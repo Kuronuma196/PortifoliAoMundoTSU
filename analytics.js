@@ -6,6 +6,7 @@
   const uniqueEl = document.getElementById('metric-unique');
   const refreshBtn = document.getElementById('refresh-analytics');
   const clearBtn = document.getElementById('clear-analytics');
+  const exportBtn = document.getElementById('export-analytics');
 
   function readEvents() {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -29,11 +30,23 @@
     }
   }
 
+  function exportJson() {
+    const data = JSON.stringify(readEvents(), null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tsu-analytics.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   refreshBtn?.addEventListener('click', render);
   clearBtn?.addEventListener('click', () => {
     localStorage.removeItem(STORAGE_KEY);
     render();
   });
+  exportBtn?.addEventListener('click', exportJson);
 
   render();
 })();

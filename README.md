@@ -41,4 +41,5 @@ Acesse `http://localhost:4173`.
 
 - `script.js` registra eventos locais de navegação (page_view, cliques e compartilhamento) em `localStorage`.
 - `analytics.js` consolida os eventos e exibe métricas na página `analises.html`.
+- `site.js` concentra funcionalidades de UX das páginas (filtros, abas de galeria, formulário de contato e sugestões de notícias).
 - A página `noticias.html` inclui ação de compartilhamento via Web Share API com fallback para cópia de link.

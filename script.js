@@ -37,8 +37,12 @@ document.querySelectorAll('.share-btn').forEach((btn) => {
       }
       return;
     }
-    await navigator.clipboard.writeText(url);
-    alert('Link copiado para compartilhamento.');
-    pushEvent('share_copy_link', title);
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('Link copiado para compartilhamento.');
+      pushEvent('share_copy_link', title);
+    } catch (_) {
+      pushEvent('share_failed', title);
+    }
   });
 });
