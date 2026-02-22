@@ -97,3 +97,42 @@ p { color: var(--muted); }
 .role-card h3 {
   margin-bottom: 0.4rem;
 }
+
+.prefs-grid {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.9rem 0 1rem;
+}
+
+.news-card h3 {
+  margin-bottom: 0.4rem;
+}
+
+.metric {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.event-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.event-table th,
+.event-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.55rem;
+  text-align: left;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.event-table th {
+  color: var(--text);
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análises de Dados | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a>
+        <a href="personagens.html">Personagens</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="cronologia.html">Cronologia</a>
+        <a href="galeria.html">Galeria</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="noticias.html">Notícias</a>
+        <a class="active" href="analises.html">Análises</a>
+        <a href="acesso.html">Acesso</a>
+        <a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Análises</p>
+      <h1>Análise de Dados do Portal</h1>
+      <p>Painel inicial com métricas locais de navegação e interação.</p>
+    </header>
+
+    <main class="section container">
+      <div class="grid three">
+        <article class="panel"><h3>Page Views</h3><p id="metric-pageviews" class="metric">0</p></article>
+        <article class="panel"><h3>Cliques rastreados</h3><p id="metric-clicks" class="metric">0</p></article>
+        <article class="panel"><h3>Páginas únicas</h3><p id="metric-unique" class="metric">0</p></article>
+      </div>
+
+      <section class="section-gap panel">
+        <div class="hero-actions">
+          <button id="refresh-analytics" class="button" data-track="refresh_analytics">Atualizar métricas</button>
+          <button id="clear-analytics" class="button ghost" data-track="clear_analytics">Limpar dados locais</button>
+        </div>
+        <h3>Eventos recentes</h3>
+        <div class="table-wrap">
+          <table class="event-table">
+            <thead><tr><th>Quando</th><th>Tipo</th><th>Página</th><th>Detalhe</th></tr></thead>
+            <tbody id="events-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="analytics.js"></script>
+  </body>
+</html>

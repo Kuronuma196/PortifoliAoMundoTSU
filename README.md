@@ -12,6 +12,8 @@ Site oficial do projeto geral **Tear's Studios Universe** (estrutura multipágin
 - `sobre.html` — missão, visão e objetivos.
 - `contato.html` — canais de envio de materiais.
 - `acesso.html` — login com Google e seleção de tipo de usuário.
+- `noticias.html` — compartilhamento de notícias e atualizações oficiais.
+- `analises.html` — painel inicial de métricas locais de uso do portal.
 
 ## Imagens
 
@@ -33,3 +35,10 @@ Acesse `http://localhost:4173`.
 - `auth.js` implementa autenticação via Google usando Firebase Authentication.
 - Para funcionar em produção, configure `window.TSU_FIREBASE_CONFIG` antes de carregar `auth.js` com os dados do seu projeto Firebase.
 - Lista inicial de e-mails de Funcionário autorizados: `kuronumadeal@gmail.com` (pode ser expandida no arquivo `auth.js`).
+
+
+## Notícias e análise de dados
+
+- `script.js` registra eventos locais de navegação (page_view, cliques e compartilhamento) em `localStorage`.
+- `analytics.js` consolida os eventos e exibe métricas na página `analises.html`.
+- A página `noticias.html` inclui ação de compartilhamento via Web Share API com fallback para cópia de link.

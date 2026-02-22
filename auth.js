@@ -19,12 +19,33 @@ const logoutBtn = document.getElementById('logout');
 const statusEl = document.getElementById('auth-status');
 const roleSelect = document.getElementById('role-select');
 const roleFeedback = document.getElementById('role-feedback');
+const prefNews = document.getElementById('pref-news');
+const prefSelection = document.getElementById('pref-selection');
+const savePrefsBtn = document.getElementById('save-prefs');
 
 const EMPLOYEE_WHITELIST = ['kuronumadeal@gmail.com'];
 const configReady = !String(firebaseConfig.apiKey || '').startsWith('YOUR_');
 
 function setStatus(text) {
   if (statusEl) statusEl.textContent = text;
+}
+
+
+function loadPreferences() {
+  const prefs = JSON.parse(localStorage.getItem('tsu_prefs') || '{}');
+  if (prefNews) prefNews.checked = Boolean(prefs.news);
+  if (prefSelection) prefSelection.checked = Boolean(prefs.selection);
+}
+
+function savePreferences() {
+  const prefs = {
+    news: Boolean(prefNews?.checked),
+    selection: Boolean(prefSelection?.checked),
+  };
+  localStorage.setItem('tsu_prefs', JSON.stringify(prefs));
+  if (roleFeedback) {
+    roleFeedback.textContent = 'Preferências salvas com sucesso.';
+  }
 }
 
 function updateRoleMessage(role, userEmail) {
@@ -61,7 +82,11 @@ if (!configReady) {
 
   if (loginBtn) {
     loginBtn.addEventListener('click', async () => {
-      await signInWithPopup(auth, provider);
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (err) {
+        setStatus('Falha no login Google. Verifique configuração Firebase e domínio autorizado.');
+      }
     });
   }
 
@@ -72,6 +97,12 @@ if (!configReady) {
       if (roleSelect) roleSelect.value = '';
       updateRoleMessage('');
     });
+  }
+
+  loadPreferences();
+
+  if (savePrefsBtn) {
+    savePrefsBtn.addEventListener('click', savePreferences);
   }
 
   if (roleSelect) {

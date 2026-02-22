@@ -16,6 +16,8 @@
         <a href="cronologia.html">Cronologia</a>
         <a href="galeria.html">Galeria</a>
         <a href="sobre.html">Sobre</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="analises.html">Análises</a>
         <a class="active" href="acesso.html">Acesso</a>
         <a class="button ghost" href="contato.html">Contato</a>
       </div>
@@ -23,34 +25,36 @@
 
     <header class="page-hero container">
       <p class="breadcrumb">Início / Acesso</p>
-      <h1>Login com conta Google</h1>
-      <p>Selecione seu tipo de usuário para receber recursos e comunicações adequadas ao seu perfil.</p>
+      <h1>Conta Google + Perfis de Usuário</h1>
+      <p>Faça login com Google e selecione seu tipo de participação no TSU.</p>
     </header>
 
     <main class="section container">
       <section class="panel">
-        <h2>Entrar</h2>
-        <p>O login utiliza autenticação Google (Firebase Authentication).</p>
-        <button id="google-login" class="button">Entrar com Google</button>
-        <button id="logout" class="button ghost" type="button">Sair</button>
+        <h2>Autenticação</h2>
+        <p>O login usa Google (Firebase Authentication).</p>
+        <div class="hero-actions">
+          <button id="google-login" class="button" data-track="auth_login_click">Entrar com Google</button>
+          <button id="logout" class="button ghost" type="button" data-track="auth_logout_click">Sair</button>
+        </div>
         <p id="auth-status" class="small-note">Nenhum usuário autenticado.</p>
       </section>
 
       <section class="section-gap">
         <h2>Tipos de usuário</h2>
         <div class="grid two">
-          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em processos seletivos de participação no projeto geral ou projetos individuais. Pode receber notificações por e-mail quando novas vagas forem abertas.</p></article>
-          <article class="panel role-card"><h3>Cliente</h3><p>Voltado para contratação de prestação de serviços e envio de mensagens para abertura de futuro projeto.</p></article>
-          <article class="panel role-card"><h3>Avaliador</h3><p>Pode comentar, criticar, avaliar e sugerir melhorias para projetos e materiais publicados.</p></article>
-          <article class="panel role-card"><h3>Funcionário</h3><p>Conta destinada a colaboradores internos. O e-mail Google é validado em uma lista de e-mails autorizados.</p></article>
-          <article class="panel role-card"><h3>Criador</h3><p>Para quem deseja ser representado no universo TSU ou criar personagens, histórias, logos, nomes e identidades visuais, sujeito a repaginagem editorial.</p></article>
+          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em processos seletivos do projeto geral ou projetos individuais. Recebe avisos de vagas abertas (quando houver).</p></article>
+          <article class="panel role-card"><h3>Cliente</h3><p>Solicita prestação de serviços e envia briefing para abertura de novos projetos.</p></article>
+          <article class="panel role-card"><h3>Avaliador</h3><p>Comenta, critica, avalia e sugere melhorias para conteúdos e projetos publicados.</p></article>
+          <article class="panel role-card"><h3>Funcionário</h3><p>Conta interna validada por whitelist de e-mails Google autorizados (inclui o fundador).</p></article>
+          <article class="panel role-card"><h3>Criador</h3><p>Submete personagens, histórias, nomes, logos e identidades visuais, sujeitos a curadoria e repaginagem.</p></article>
         </div>
       </section>
 
       <section class="section-gap panel">
-        <h2>Selecionar perfil ativo</h2>
+        <h2>Perfil e preferências</h2>
         <label for="role-select">Tipo de usuário</label>
-        <select id="role-select" class="role-select">
+        <select id="role-select" class="role-select" data-track="role_select_change">
           <option value="">Selecione...</option>
           <option value="candidato">Candidato</option>
           <option value="cliente">Cliente</option>
@@ -58,6 +62,12 @@
           <option value="funcionario">Funcionário</option>
           <option value="criador">Criador</option>
         </select>
+
+        <div class="prefs-grid">
+          <label><input id="pref-news" type="checkbox" /> Receber novidades e notícias por e-mail</label>
+          <label><input id="pref-selection" type="checkbox" /> Receber aviso de processos seletivos</label>
+        </div>
+        <button id="save-prefs" class="button" type="button" data-track="save_prefs_click">Salvar preferências</button>
         <p id="role-feedback" class="small-note"></p>
       </section>
     </main>
