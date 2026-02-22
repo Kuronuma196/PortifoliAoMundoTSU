@@ -153,3 +153,37 @@ p { color: var(--muted); }
 .project-item:hover {
   transform: translateY(-2px);
 }
+
+.code-block {
+  background: #0b1127;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  white-space: pre-wrap;
+  color: #cfe0ff;
+}
+
+.chat-log {
+  min-height: 220px;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem;
+  background: #0b1127;
+  margin-bottom: 0.8rem;
+}
+
+.chat-msg {
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.chat-msg.user {
+  background: #1d2f5e;
+}
+
+.chat-msg.floryn {
+  background: #1a2342;
+}

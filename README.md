@@ -15,6 +15,8 @@ Site oficial do projeto geral **Tear's Studios Universe** (estrutura multipágin
 - `noticias.html` — compartilhamento de notícias e atualizações oficiais.
 - `analises.html` — painel inicial de métricas locais de uso do portal.
 - `painel.html` — consolidação operacional local (solicitações, contatos e sugestões).
+- `criacao.html` — página pública para integração com APIs de geração (imagem, vídeo, áudio e texto).
+- `floryn.html` — atendimento virtual com a IA Floryn e notificações.
 
 ## Imagens
 
@@ -45,3 +47,9 @@ Acesse `http://localhost:4173`.
 - `site.js` concentra funcionalidades de UX das páginas (filtros, abas de galeria, formulário de contato e sugestões de notícias).
 - `painel.js` consolida os dados locais operacionais e permite exportar base JSON.
 - A página `noticias.html` inclui ação de compartilhamento via Web Share API com fallback para cópia de link.
+
+
+## Criação pública e atendimento virtual
+
+- `criacao.js` integra endpoints configuráveis para geração de imagem, vídeo, áudio e texto.
+- `floryn.js` oferece chat local da atendente IA Floryn e notificações para público logado e não logado.

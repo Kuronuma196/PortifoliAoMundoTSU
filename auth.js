@@ -148,6 +148,7 @@ if (!configReady) {
     logoutBtn.addEventListener('click', async () => {
       await signOut(auth);
       localStorage.removeItem('tsu_role');
+      localStorage.removeItem('tsu_last_user_email');
       if (roleSelect) roleSelect.value = '';
       updateRoleMessage('', '');
     });
@@ -170,6 +171,7 @@ if (!configReady) {
     }
 
     setStatus(`Conectado: ${user.displayName || user.email} (${user.email})`);
+    localStorage.setItem('tsu_last_user_email', user.email || '');
     const savedRole = localStorage.getItem('tsu_role') || '';
     if (roleSelect && savedRole) roleSelect.value = savedRole;
     updateRoleMessage(savedRole, user.email || '');
