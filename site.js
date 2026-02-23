@@ -5,6 +5,15 @@
     } catch (_) {}
   }
 
+  function escapeHtml(text) {
+    return String(text || '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
+
   async function apiPost(path, payload) {
     try {
       const r = await fetch(path, {
@@ -16,6 +25,28 @@
     } catch (_) {
       return false;
     }
+  }
+
+  async function hydrateHomeStats() {
+    const contactsEl = document.getElementById('home-count-contacts');
+    if (!contactsEl) return;
+
+    const ids = {
+      contacts: contactsEl,
+      newsSuggestions: document.getElementById('home-count-news'),
+      roleRequests: document.getElementById('home-count-roles'),
+      analyticsEvents: document.getElementById('home-count-events'),
+    };
+
+    try {
+      const r = await fetch('/api/dashboard');
+      if (!r.ok) return;
+      const data = await r.json();
+      Object.entries(ids).forEach(([key, node]) => {
+        if (!node) return;
+        node.textContent = String(data?.counts?.[key] || 0);
+      });
+    } catch (_) {}
   }
 
   const projectFilter = document.getElementById('project-filter');
@@ -65,7 +96,7 @@
     newsList.innerHTML = items
       .slice(-8)
       .reverse()
-      .map((n) => `<article class="panel"><p class="meta">Comunidade</p><h3>${n.title}</h3><p>${n.summary}</p></article>`)
+      .map((n) => `<article class="panel"><p class="meta">Comunidade</p><h3>${escapeHtml(n.title)}</h3><p>${escapeHtml(n.summary)}</p></article>`)
       .join('');
   }
 
@@ -112,4 +143,6 @@
       track('contact_form_submit');
     });
   }
+
+  hydrateHomeStats();
 })();

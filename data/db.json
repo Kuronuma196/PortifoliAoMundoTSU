@@ -26,6 +26,17 @@
       "type": "page_view",
       "page": "painel.html",
       "detail": "Painel Operacional | TSU"
+    },
+    {
+      "at": "2026-02-22T23:14:48.544Z",
+      "type": "page_view",
+      "page": "index.html",
+      "detail": "Tear's Studios Universe | Site Oficial"
     }
-  ]
+  ],
+  "auth": {
+    "employeeWhitelist": [
+      "kuronumadeal@gmail.com"
+    ]
+  }
 }

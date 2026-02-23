@@ -63,8 +63,14 @@ Acesse `http://localhost:4173`.
 - Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.
 
 
-## Fase 1 — Backend real (API + banco local)
+## Fase 2 — Preparação de autenticação e melhoria de front-end
 
 - `server.js` fornece API HTTP + servidor estático com persistência em `data/db.json`.
 - Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`.
 - `api-client.js` disponibiliza helper básico para chamadas GET/POST.
+
+
+- `server.js` agora expõe `/api/auth/employee-whitelist` para centralizar autorização de perfil Funcionário.
+- `auth.js` passa a consumir whitelist do backend com fallback local, preparando transição para produção.
+- `script.js` e `styles.css` incluem melhorias visuais globais (tema claro/escuro, menu responsivo e toasts).
+- `index.html` + `site.js` adicionam cards com dados do `/api/dashboard` para visão rápida operacional na home.

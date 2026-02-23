@@ -8,16 +8,31 @@ const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'db.json');
 
+const defaultDb = {
+  contacts: [],
+  newsSuggestions: [],
+  roleRequests: [],
+  analyticsEvents: [],
+  auth: {
+    employeeWhitelist: ['kuronumadeal@gmail.com'],
+  },
+};
+
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(
-    DATA_FILE,
-    JSON.stringify({ contacts: [], newsSuggestions: [], roleRequests: [], analyticsEvents: [] }, null, 2)
-  );
+  fs.writeFileSync(DATA_FILE, JSON.stringify(defaultDb, null, 2));
 }
 
 function readDb() {
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  const parsed = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  if (!Array.isArray(parsed.contacts)) parsed.contacts = [];
+  if (!Array.isArray(parsed.newsSuggestions)) parsed.newsSuggestions = [];
+  if (!Array.isArray(parsed.roleRequests)) parsed.roleRequests = [];
+  if (!Array.isArray(parsed.analyticsEvents)) parsed.analyticsEvents = [];
+  if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
+    parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
+  }
+  return parsed;
 }
 
 function writeDb(db) {
@@ -73,7 +88,12 @@ const server = http.createServer(async (req, res) => {
   const { pathname } = url;
 
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 1, message: 'Backend e banco local ativos' });
+    return sendJson(res, 200, { ok: true, phase: 2, message: 'Backend local ativo + autenticação preparada' });
+  }
+
+  if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
+    const db = readDb();
+    return sendJson(res, 200, { emails: db.auth.employeeWhitelist });
   }
 
   if (pathname === '/api/contact' && req.method === 'POST') {
@@ -120,6 +140,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
+      phase: 2,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,

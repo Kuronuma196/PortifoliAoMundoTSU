@@ -28,12 +28,29 @@ const requestDescription = document.getElementById('request-description');
 const requestIntro = document.getElementById('request-intro');
 const requestFeedback = document.getElementById('request-feedback');
 
-const EMPLOYEE_WHITELIST = ['kuronumadeal@gmail.com'];
+const DEFAULT_EMPLOYEE_WHITELIST = ['kuronumadeal@gmail.com'];
+let employeeWhitelist = [...DEFAULT_EMPLOYEE_WHITELIST];
 const configReady = !String(firebaseConfig.apiKey || '').startsWith('YOUR_');
 const REQUESTS_KEY = 'tsu_role_requests';
 
 function setStatus(text) {
   if (statusEl) statusEl.textContent = text;
+}
+
+function isEmployeeEmailAllowed(email) {
+  return employeeWhitelist.includes((email || '').toLowerCase());
+}
+
+async function loadEmployeeWhitelist() {
+  try {
+    const r = await fetch('/api/auth/employee-whitelist');
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!Array.isArray(data?.emails)) return;
+    employeeWhitelist = data.emails.map((item) => String(item || '').toLowerCase()).filter(Boolean);
+  } catch (_) {
+    employeeWhitelist = [...DEFAULT_EMPLOYEE_WHITELIST];
+  }
 }
 
 function loadPreferences() {
@@ -70,7 +87,7 @@ function updateRoleMessage(role, userEmail) {
     return;
   }
 
-  if (role === 'funcionario' && !EMPLOYEE_WHITELIST.includes((userEmail || '').toLowerCase())) {
+  if (role === 'funcionario' && !isEmployeeEmailAllowed(userEmail)) {
     roleFeedback.textContent = 'Seu e-mail Google não está autorizado como Funcionário. Use outro perfil ou solicite cadastro.';
     if (requestIntro) requestIntro.textContent = roleIntro(role);
     return;
@@ -112,7 +129,7 @@ function saveRoleRequest(auth) {
     const email = auth.currentUser?.email || '';
 
     if (!role || !title || !description) return;
-    if (role === 'funcionario' && !EMPLOYEE_WHITELIST.includes(email.toLowerCase())) {
+    if (role === 'funcionario' && !isEmployeeEmailAllowed(email)) {
       if (requestFeedback) requestFeedback.textContent = 'Solicitação bloqueada: e-mail não autorizado para perfil Funcionário.';
       return;
     }
@@ -137,13 +154,18 @@ function saveRoleRequest(auth) {
   });
 }
 
-if (!configReady) {
-  setStatus('Configuração Firebase pendente. Defina window.TSU_FIREBASE_CONFIG para ativar login Google.');
-  if (loginBtn) loginBtn.disabled = true;
-  if (logoutBtn) logoutBtn.disabled = true;
-  if (requestIntro) requestIntro.textContent = roleIntro('');
-  updateRoleMessage('', '');
-} else {
+(async function boot() {
+  await loadEmployeeWhitelist();
+
+  if (!configReady) {
+    setStatus('Configuração Firebase pendente. Defina window.TSU_FIREBASE_CONFIG para ativar login Google.');
+    if (loginBtn) loginBtn.disabled = true;
+    if (logoutBtn) logoutBtn.disabled = true;
+    if (requestIntro) requestIntro.textContent = roleIntro('');
+    updateRoleMessage('', '');
+    return;
+  }
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -194,4 +216,4 @@ if (!configReady) {
     if (roleSelect && savedRole) roleSelect.value = savedRole;
     updateRoleMessage(savedRole, user.email || '');
   });
-}
+})();
