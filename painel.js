@@ -7,8 +7,10 @@
   const contactsCount = document.getElementById('panel-contacts-count');
   const newsCount = document.getElementById('panel-news-count');
   const notificationsCount = document.getElementById('panel-notifications-count');
+  const cmsCount = document.getElementById('panel-cms-count');
   const requestsList = document.getElementById('panel-requests-list');
   const notificationsList = document.getElementById('panel-notifications-list');
+  const cmsList = document.getElementById('panel-cms-list');
   const refreshBtn = document.getElementById('panel-refresh');
   const exportBtn = document.getElementById('panel-export');
 
@@ -40,6 +42,7 @@
           contacts: Array(d.counts?.contacts || 0).fill({}),
           newsSuggestions: d.latestNews || [],
           notifications: d.latestNotifications || [],
+          articles: d.latestArticles || [],
           counts: d.counts || {},
         };
       }
@@ -53,6 +56,7 @@
         newsSuggestions: local.newsSuggestions.length,
         roleRequests: local.requests.length,
         notifications: local.notifications.length,
+        cmsArticles: 0,
       },
     };
   }
@@ -64,6 +68,7 @@
     if (contactsCount) contactsCount.textContent = String(data.counts.contacts ?? data.contacts.length);
     if (newsCount) newsCount.textContent = String(data.counts.newsSuggestions ?? data.newsSuggestions.length);
     if (notificationsCount) notificationsCount.textContent = String(data.counts.notifications ?? data.notifications.length);
+    if (cmsCount) cmsCount.textContent = String(data.counts.cmsArticles ?? (data.articles?.length || 0));
 
     if (requestsList) {
       requestsList.innerHTML = (data.requests || [])
@@ -87,6 +92,20 @@
         notificationsList.innerHTML = '<article class="panel"><p class="small-note">Nenhuma notificação registrada até o momento.</p></article>';
       }
     }
+
+    if (cmsList) {
+      cmsList.innerHTML = (data.articles || [])
+        .slice(0, 8)
+        .map(
+          (a) =>
+            `<article class="panel"><p class="meta">${escapeHtml(a.category || 'Conteúdo')} • ${a.at ? new Date(a.at).toLocaleString() : ''}</p><h3>${escapeHtml(a.title || 'Artigo')}</h3><p>${escapeHtml(a.content || '')}</p><p class="small-note">Status: ${escapeHtml(a.status || 'draft')}</p></article>`
+        )
+        .join('');
+      if (!data.articles?.length) {
+        cmsList.innerHTML = '<article class="panel"><p class="small-note">Nenhum artigo CMS registrado.</p></article>';
+      }
+    }
+
   }
 
   function exportAll() {

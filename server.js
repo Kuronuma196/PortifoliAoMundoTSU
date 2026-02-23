@@ -14,6 +14,7 @@ const defaultDb = {
   roleRequests: [],
   analyticsEvents: [],
   notifications: [],
+  cmsArticles: [],
   auth: {
     employeeWhitelist: ['kuronumadeal@gmail.com'],
   },
@@ -29,6 +30,7 @@ function readDb() {
   if (!Array.isArray(parsed.roleRequests)) parsed.roleRequests = [];
   if (!Array.isArray(parsed.analyticsEvents)) parsed.analyticsEvents = [];
   if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
+  if (!Array.isArray(parsed.cmsArticles)) parsed.cmsArticles = [];
   if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
     parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
   }
@@ -88,7 +90,7 @@ const server = http.createServer(async (req, res) => {
   const { pathname } = url;
 
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 3, message: 'Fase 3 ativa: backend + autenticação + notificações reais' });
+    return sendJson(res, 200, { ok: true, phase: 4, message: 'Fase 4 ativa: CMS/admin interno + melhorias visuais' });
   }
 
   if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
@@ -121,6 +123,48 @@ const server = http.createServer(async (req, res) => {
     db.notifications = db.notifications.slice(-500);
     writeDb(db);
     return sendJson(res, 201, { ok: true });
+  }
+
+  if (pathname === '/api/cms/articles' && req.method === 'GET') {
+    const db = readDb();
+    return sendJson(res, 200, db.cmsArticles.slice(-80).reverse());
+  }
+
+  if (pathname === '/api/cms/articles' && req.method === 'POST') {
+    const payload = await parseBody(req).catch(() => null);
+    if (!payload || !payload.title || !payload.category || !payload.content) {
+      return sendJson(res, 400, { error: 'Dados inválidos' });
+    }
+
+    const db = readDb();
+    const article = {
+      id: `art_${Date.now()}`,
+      title: String(payload.title).trim(),
+      category: String(payload.category).trim(),
+      content: String(payload.content).trim(),
+      status: String(payload.status || 'draft').trim().toLowerCase(),
+      author: String(payload.author || 'Equipe TSU').trim(),
+      at: new Date().toISOString(),
+    };
+    db.cmsArticles.push(article);
+    db.cmsArticles = db.cmsArticles.slice(-500);
+    writeDb(db);
+    return sendJson(res, 201, { ok: true, article });
+  }
+
+  if (pathname === '/api/cms/overview' && req.method === 'GET') {
+    const db = readDb();
+    return sendJson(res, 200, {
+      phase: 4,
+      counts: {
+        articles: db.cmsArticles.length,
+        contacts: db.contacts.length,
+        newsSuggestions: db.newsSuggestions.length,
+        notifications: db.notifications.length,
+      },
+      latestArticles: db.cmsArticles.slice(-6).reverse(),
+      latestSuggestions: db.newsSuggestions.slice(-6).reverse(),
+    });
   }
 
   if (pathname === '/api/contact' && req.method === 'POST') {
@@ -167,17 +211,19 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 3,
+      phase: 4,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,
         roleRequests: db.roleRequests.length,
         analyticsEvents: db.analyticsEvents.length,
         notifications: db.notifications.length,
+        cmsArticles: db.cmsArticles.length,
       },
       latestRoleRequests: db.roleRequests.slice(-8).reverse(),
       latestNews: db.newsSuggestions.slice(-8).reverse(),
       latestNotifications: db.notifications.slice(-8).reverse(),
+      latestArticles: db.cmsArticles.slice(-8).reverse(),
     });
   }
 

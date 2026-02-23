@@ -9,6 +9,7 @@
     ['analises.html', 'Análises'],
     ['acesso.html', 'Acesso'],
     ['painel.html', 'Painel'],
+    ['cms.html', 'CMS interno'],
     ['criacao.html', 'Criação'],
     ['floryn.html', 'Floryn IA'],
     ['sobre.html', 'Sobre'],

@@ -37,6 +37,7 @@
       roleRequests: document.getElementById('home-count-roles'),
       analyticsEvents: document.getElementById('home-count-events'),
       notifications: document.getElementById('home-count-notifications'),
+      cmsArticles: document.getElementById('home-count-articles'),
     };
 
     try {
