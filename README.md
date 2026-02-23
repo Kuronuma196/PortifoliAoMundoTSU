@@ -53,3 +53,9 @@ Acesse `http://localhost:4173`.
 
 - `criacao.js` integra endpoints configuráveis para geração de imagem, vídeo, áudio e texto.
 - `floryn.js` oferece chat local da atendente IA Floryn e notificações para público logado e não logado.
+
+
+## Navegação dinâmica (UI/UX)
+
+- `nav-dynamic.js` adiciona launcher global de páginas com busca e atalho `Ctrl/Cmd + K`.
+- Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.

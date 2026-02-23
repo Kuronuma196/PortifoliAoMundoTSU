@@ -187,3 +187,63 @@ p { color: var(--muted); }
 .chat-msg.floryn {
   background: #1a2342;
 }
+
+.page-launcher-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #071223;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.page-launcher-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 20, 0.7);
+  display: none;
+  place-items: center;
+  z-index: 50;
+}
+
+.page-launcher-modal {
+  width: min(760px, 92vw);
+  max-height: 84vh;
+  overflow: auto;
+  background: #0f1735;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.page-launcher-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.launcher-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.9rem;
+}
+
+.launcher-item {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.7rem;
+  background: #111a3a;
+}
+
+.launcher-item.active {
+  border-color: var(--accent);
+}
