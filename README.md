@@ -64,16 +64,20 @@ Acesse `http://localhost:4173`.
 - Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.
 
 
-## Fase 6 — Observabilidade real e reorganização de navegação/design
+## Fase 7 — Hardening final e estabilidade de design global
 
 - `server.js` fornece API HTTP + servidor estático com persistência em `data/db.json`.
-- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`, `/api/auth/employee-whitelist`, `/api/notifications`, `/api/cms/articles`, `/api/cms/overview`, `/api/creation/generate`, `/api/analytics/summary`.
+- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`, `/api/auth/employee-whitelist`, `/api/notifications`, `/api/cms/articles`, `/api/cms/overview`, `/api/creation/generate`, `/api/analytics/summary`, `/api/security/status`.
 - `cms.html` + `cms.js` implementam painel de criação de artigos internos com indicadores operacionais.
 - `criacao.html` + `criacao.js` implementam fluxo unificado para geração de texto, imagem, vídeo e áudio com histórico recente.
 - `server.js` adiciona endpoint `/api/creation/generate` e telemetria de `creationJobs` no dashboard.
 - `painel.js` e `index.html` exibem métricas operacionais ampliadas para CMS e criação.
 - `styles.css` recebeu organização visual inspirada em portais modernos mantendo identidade TSU (navegação em chips, hierarquia e consistência de seções).
 
-- `analytics.js` + `analises.html` agora consomem resumo analítico real por página/tipo/tendência com `/api/analytics/summary`.
+- `analytics.js` + `analises.html` agora consomem resumo analítico real por página/tipo/tendência com `/api/analytics/summary`, `/api/security/status`.
 - `script.js` reorganiza automaticamente a navegação em duas linhas por prioridade, corrigindo o acesso às páginas e evitando menu quebrado no topo.
 - `styles.css` recebeu ajustes de IA de layout para navegação multipágina (rows primária/secundária e consistência visual do header).
+
+- `server.js` aplica hardening base (headers de segurança, limite de payload, sanitização de entradas e rate limit em POST).
+- `script.js` + `styles.css` estabilizam a navegação em duas camadas para acesso rápido a todas as páginas sem quebra visual.
+- `analises.html` + `analytics.js` seguem como centro de observabilidade com resumo real e histórico recente.

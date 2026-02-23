@@ -8,6 +8,11 @@ const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'db.json');
 
+const MAX_BODY_BYTES = 1_000_000;
+const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT = 60;
+const rateMap = new Map();
+
 const defaultDb = {
   contacts: [],
   newsSuggestions: [],
@@ -43,15 +48,56 @@ function writeDb(db) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
 }
 
+function securityHeaders(contentType = 'application/json; charset=utf-8') {
+  return {
+    'Content-Type': contentType,
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
+  };
+}
+
 function sendJson(res, code, data) {
-  res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' });
+  res.writeHead(code, securityHeaders());
   res.end(JSON.stringify(data));
+}
+
+function sanitizeText(value, max = 3000) {
+  return String(value || '').trim().slice(0, max);
+}
+
+function allowRateLimit(req) {
+  const ip = String(req.socket.remoteAddress || 'local');
+  const now = Date.now();
+  const current = rateMap.get(ip) || { count: 0, resetAt: now + RATE_WINDOW_MS };
+  if (now > current.resetAt) {
+    const refreshed = { count: 1, resetAt: now + RATE_WINDOW_MS };
+    rateMap.set(ip, refreshed);
+    return true;
+  }
+
+  if (current.count >= RATE_LIMIT) return false;
+  current.count += 1;
+  rateMap.set(ip, current);
+  return true;
 }
 
 function parseBody(req) {
   return new Promise((resolve, reject) => {
     let raw = '';
-    req.on('data', (c) => (raw += c));
+    let bytes = 0;
+
+    req.on('data', (c) => {
+      bytes += c.length;
+      if (bytes > MAX_BODY_BYTES) {
+        reject(new Error('payload_too_large'));
+        req.destroy();
+        return;
+      }
+      raw += c;
+    });
+
     req.on('end', () => {
       try {
         resolve(raw ? JSON.parse(raw) : {});
@@ -78,12 +124,12 @@ function serveStatic(req, res, pathname) {
   const safe = path.normalize(pathname === '/' ? '/index.html' : pathname).replace(/^\.+/, '');
   const file = path.join(ROOT, safe);
   if (!file.startsWith(ROOT) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
-    res.writeHead(404);
+    res.writeHead(404, securityHeaders('text/plain; charset=utf-8'));
     res.end('Not Found');
     return;
   }
   const ext = path.extname(file).toLowerCase();
-  res.writeHead(200, { 'Content-Type': mime[ext] || 'application/octet-stream' });
+  res.writeHead(200, securityHeaders(mime[ext] || 'application/octet-stream'));
   fs.createReadStream(file).pipe(res);
 }
 
@@ -91,8 +137,23 @@ const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   const { pathname } = url;
 
+  if (req.method === 'POST' && !allowRateLimit(req)) {
+    return sendJson(res, 429, { error: 'Muitas requisições. Tente novamente em instantes.' });
+  }
+
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 6, message: 'Fase 6 ativa: observabilidade real + design de navegação refinado' });
+    return sendJson(res, 200, { ok: true, phase: 7, message: 'Fase 7 ativa: hardening final + design system estabilizado' });
+  }
+
+  if (pathname === '/api/security/status' && req.method === 'GET') {
+    return sendJson(res, 200, {
+      phase: 7,
+      safeguards: {
+        securityHeaders: true,
+        requestRateLimit: { enabled: true, limitPerMinute: RATE_LIMIT },
+        payloadLimitBytes: MAX_BODY_BYTES,
+      },
+    });
   }
 
   if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
@@ -101,25 +162,24 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/notifications' && req.method === 'GET') {
-    const audience = (url.searchParams.get('audience') || '').trim().toLowerCase();
+    const audience = sanitizeText(url.searchParams.get('audience') || '', 30).toLowerCase();
     const db = readDb();
-    const filtered = audience
-      ? db.notifications.filter((n) => n.audience === 'all' || n.audience === audience)
-      : db.notifications;
+    const filtered = audience ? db.notifications.filter((n) => n.audience === 'all' || n.audience === audience) : db.notifications;
     return sendJson(res, 200, filtered.slice(-50).reverse());
   }
 
   if (pathname === '/api/notifications' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.title || !payload.message) {
-      return sendJson(res, 400, { error: 'Dados inválidos' });
-    }
+    const title = sanitizeText(payload?.title, 120);
+    const message = sanitizeText(payload?.message, 1200);
+    if (!title || !message) return sendJson(res, 400, { error: 'Dados inválidos' });
+
     const db = readDb();
     db.notifications.push({
-      title: String(payload.title).trim(),
-      message: String(payload.message).trim(),
-      audience: String(payload.audience || 'all').toLowerCase(),
-      source: String(payload.source || 'portal').trim(),
+      title,
+      message,
+      audience: sanitizeText(payload?.audience || 'all', 20).toLowerCase(),
+      source: sanitizeText(payload?.source || 'portal', 50),
       at: new Date().toISOString(),
     });
     db.notifications = db.notifications.slice(-500);
@@ -127,16 +187,12 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 201, { ok: true });
   }
 
-
-
   if (pathname === '/api/creation/generate' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.type || !payload.prompt) {
-      return sendJson(res, 400, { error: 'Dados inválidos' });
-    }
+    const type = sanitizeText(payload?.type, 20).toLowerCase();
+    const prompt = sanitizeText(payload?.prompt, 1000);
+    if (!type || !prompt) return sendJson(res, 400, { error: 'Dados inválidos' });
 
-    const type = String(payload.type).trim().toLowerCase();
-    const prompt = String(payload.prompt).trim();
     const job = {
       id: `job_${Date.now()}`,
       type,
@@ -147,25 +203,13 @@ const server = http.createServer(async (req, res) => {
     };
 
     if (type === 'text') {
-      job.output = {
-        text: `Versão inicial gerada para: ${prompt}`,
-        excerpt: `Resumo criativo: ${prompt.slice(0, 140)}`,
-      };
+      job.output = { text: `Versão inicial gerada para: ${prompt}`, excerpt: `Resumo criativo: ${prompt.slice(0, 140)}` };
     } else if (type === 'image') {
-      job.output = {
-        url: 'assets/images/hero-universe.svg',
-        caption: `Conceito visual para: ${prompt}`,
-      };
+      job.output = { url: 'assets/images/hero-universe.svg', caption: `Conceito visual para: ${prompt}` };
     } else if (type === 'video') {
-      job.output = {
-        url: 'https://example.com/video-demo-tsu',
-        storyboard: `Storyboard base para: ${prompt}`,
-      };
+      job.output = { url: 'https://example.com/video-demo-tsu', storyboard: `Storyboard base para: ${prompt}` };
     } else if (type === 'audio') {
-      job.output = {
-        url: 'https://example.com/audio-demo-tsu',
-        notes: `Guia sonoro para: ${prompt}`,
-      };
+      job.output = { url: 'https://example.com/audio-demo-tsu', notes: `Guia sonoro para: ${prompt}` };
     } else {
       return sendJson(res, 400, { error: 'Tipo de geração inválido' });
     }
@@ -174,7 +218,7 @@ const server = http.createServer(async (req, res) => {
     db.creationJobs.push(job);
     db.creationJobs = db.creationJobs.slice(-500);
     writeDb(db);
-    return sendJson(res, 201, { ok: true, jobId: job.id, output: job.output, phase: 6 });
+    return sendJson(res, 201, { ok: true, jobId: job.id, output: job.output, phase: 7 });
   }
 
   if (pathname === '/api/cms/articles' && req.method === 'GET') {
@@ -184,18 +228,19 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/cms/articles' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.title || !payload.category || !payload.content) {
-      return sendJson(res, 400, { error: 'Dados inválidos' });
-    }
+    const title = sanitizeText(payload?.title, 160);
+    const category = sanitizeText(payload?.category, 80);
+    const content = sanitizeText(payload?.content, 3000);
+    if (!title || !category || !content) return sendJson(res, 400, { error: 'Dados inválidos' });
 
     const db = readDb();
     const article = {
       id: `art_${Date.now()}`,
-      title: String(payload.title).trim(),
-      category: String(payload.category).trim(),
-      content: String(payload.content).trim(),
-      status: String(payload.status || 'draft').trim().toLowerCase(),
-      author: String(payload.author || 'Equipe TSU').trim(),
+      title,
+      category,
+      content,
+      status: sanitizeText(payload?.status || 'draft', 20).toLowerCase(),
+      author: sanitizeText(payload?.author || 'Equipe TSU', 120),
       at: new Date().toISOString(),
     };
     db.cmsArticles.push(article);
@@ -207,7 +252,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/cms/overview' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 6,
+      phase: 7,
       counts: {
         articles: db.cmsArticles.length,
         contacts: db.contacts.length,
@@ -221,46 +266,65 @@ const server = http.createServer(async (req, res) => {
 
   if (pathname === '/api/contact' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.name || !payload.email || !payload.message) {
-      return sendJson(res, 400, { error: 'Dados inválidos' });
-    }
+    const name = sanitizeText(payload?.name, 120);
+    const email = sanitizeText(payload?.email, 140);
+    const message = sanitizeText(payload?.message, 2000);
+    if (!name || !email || !message) return sendJson(res, 400, { error: 'Dados inválidos' });
+
     const db = readDb();
-    db.contacts.push({ ...payload, at: new Date().toISOString() });
+    db.contacts.push({ name, email, type: sanitizeText(payload?.type, 60), message, at: new Date().toISOString() });
     writeDb(db);
     return sendJson(res, 201, { ok: true });
   }
 
   if (pathname === '/api/news-suggestions' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.title || !payload.summary) return sendJson(res, 400, { error: 'Dados inválidos' });
+    const title = sanitizeText(payload?.title, 160);
+    const summary = sanitizeText(payload?.summary, 2000);
+    if (!title || !summary) return sendJson(res, 400, { error: 'Dados inválidos' });
+
     const db = readDb();
-    db.newsSuggestions.push({ ...payload, at: new Date().toISOString() });
+    db.newsSuggestions.push({ title, summary, at: new Date().toISOString() });
     writeDb(db);
     return sendJson(res, 201, { ok: true });
   }
 
   if (pathname === '/api/role-requests' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.role || !payload.title || !payload.description) {
-      return sendJson(res, 400, { error: 'Dados inválidos' });
-    }
+    const role = sanitizeText(payload?.role, 60);
+    const title = sanitizeText(payload?.title, 160);
+    const description = sanitizeText(payload?.description, 2000);
+    if (!role || !title || !description) return sendJson(res, 400, { error: 'Dados inválidos' });
+
     const db = readDb();
-    db.roleRequests.push({ ...payload, at: new Date().toISOString() });
+    db.roleRequests.push({
+      role,
+      title,
+      description,
+      email: sanitizeText(payload?.email, 140),
+      user: sanitizeText(payload?.user, 120),
+      at: new Date().toISOString(),
+    });
     writeDb(db);
     return sendJson(res, 201, { ok: true });
   }
 
   if (pathname === '/api/analytics/events' && req.method === 'POST') {
     const payload = await parseBody(req).catch(() => null);
-    if (!payload || !payload.type) return sendJson(res, 400, { error: 'Dados inválidos' });
+    const type = sanitizeText(payload?.type, 80);
+    if (!type) return sendJson(res, 400, { error: 'Dados inválidos' });
+
     const db = readDb();
-    db.analyticsEvents.push({ ...payload, at: payload.at || new Date().toISOString() });
+    db.analyticsEvents.push({
+      type,
+      page: sanitizeText(payload?.page, 120),
+      detail: sanitizeText(payload?.detail, 300),
+      at: sanitizeText(payload?.at, 40) || new Date().toISOString(),
+    });
     db.analyticsEvents = db.analyticsEvents.slice(-2000);
     writeDb(db);
     return sendJson(res, 201, { ok: true });
   }
-
-
 
   if (pathname === '/api/analytics/summary' && req.method === 'GET') {
     const db = readDb();
@@ -292,7 +356,7 @@ const server = http.createServer(async (req, res) => {
       .map(([day, count]) => ({ day, count }));
 
     return sendJson(res, 200, {
-      phase: 6,
+      phase: 7,
       totals: {
         events: events.length,
         pageViews: byType.page_view || 0,
@@ -308,7 +372,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 6,
+      phase: 7,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,
