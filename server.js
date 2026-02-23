@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
@@ -12,6 +13,12 @@ const MAX_BODY_BYTES = 1_000_000;
 const RATE_WINDOW_MS = 60_000;
 const RATE_LIMIT = 60;
 const rateMap = new Map();
+const LIVE_NEWS_URL = 'https://api.spaceflightnewsapi.net/v4/articles/?limit=6&ordering=-published_at';
+const LIVE_NEWS_TTL_MS = 10 * 60 * 1000;
+const liveNewsCache = {
+  data: null,
+  fetchedAt: 0,
+};
 
 const defaultDb = {
   contacts: [],
@@ -107,6 +114,88 @@ function parseBody(req) {
     });
     req.on('error', reject);
   });
+}
+
+function readJsonFromUrl(url) {
+  return new Promise((resolve, reject) => {
+    const request = https.get(url, { timeout: 7000, headers: { 'User-Agent': 'TSU-Portal/1.0' } }, (response) => {
+      if ((response.statusCode || 500) >= 400) {
+        reject(new Error(`upstream_${response.statusCode}`));
+        response.resume();
+        return;
+      }
+
+      let body = '';
+      response.setEncoding('utf8');
+      response.on('data', (chunk) => {
+        body += chunk;
+      });
+      response.on('end', () => {
+        try {
+          resolve(JSON.parse(body));
+        } catch (_) {
+          reject(new Error('upstream_invalid_json'));
+        }
+      });
+    });
+
+    request.on('timeout', () => request.destroy(new Error('upstream_timeout')));
+    request.on('error', reject);
+  });
+}
+
+async function getLiveNews() {
+  const now = Date.now();
+  const fromCache = liveNewsCache.data && now - liveNewsCache.fetchedAt < LIVE_NEWS_TTL_MS;
+  if (fromCache) return { source: 'cache', items: liveNewsCache.data };
+
+  try {
+    const payload = await readJsonFromUrl(LIVE_NEWS_URL);
+    const rows = Array.isArray(payload?.results) ? payload.results : [];
+    const items = rows.slice(0, 6).map((item) => ({
+      title: sanitizeText(item?.title, 220),
+      summary: sanitizeText(item?.summary, 420),
+      imageUrl: sanitizeText(item?.image_url, 1000),
+      url: sanitizeText(item?.url, 1000),
+      source: sanitizeText(item?.news_site, 120),
+      publishedAt: sanitizeText(item?.published_at, 40),
+    })).filter((item) => item.title && item.url);
+
+    if (!items.length) throw new Error('upstream_empty_results');
+
+    liveNewsCache.data = items;
+    liveNewsCache.fetchedAt = now;
+    return { source: 'live', items };
+  } catch (_) {
+    const db = readDb();
+    const fromSuggestions = db.newsSuggestions
+      .slice(-4)
+      .reverse()
+      .map((item) => ({
+        title: sanitizeText(item?.title, 220),
+        summary: sanitizeText(item?.summary, 420),
+        imageUrl: '',
+        url: '/noticias.html',
+        source: 'Comunidade TSU',
+        publishedAt: sanitizeText(item?.at, 40) || new Date().toISOString(),
+      }));
+
+    const fromCms = db.cmsArticles
+      .slice(-4)
+      .reverse()
+      .map((item) => ({
+        title: sanitizeText(item?.title, 220),
+        summary: sanitizeText(item?.content, 420),
+        imageUrl: '',
+        url: '/cms.html',
+        source: 'Editorial TSU',
+        publishedAt: sanitizeText(item?.at, 40) || new Date().toISOString(),
+      }));
+
+    const fallback = [...fromSuggestions, ...fromCms].filter((item) => item.title && item.summary).slice(0, 6);
+    if (fallback.length) return { source: 'local_verified', items: fallback };
+    throw new Error('live_news_unavailable');
+  }
 }
 
 const mime = {
@@ -393,6 +482,23 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/news-suggestions' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, db.newsSuggestions.slice(-30));
+  }
+
+  if (pathname === '/api/news/live' && req.method === 'GET') {
+    try {
+      const data = await getLiveNews();
+      return sendJson(res, 200, {
+        phase: 9,
+        provider: data.source === 'live' || data.source === 'cache' ? 'spaceflightnewsapi' : 'local_tsu_data',
+        fetchedFrom: data.source,
+        items: data.items,
+      });
+    } catch (error) {
+      return sendJson(res, 503, {
+        error: 'live_news_unavailable',
+        details: sanitizeText(error?.message || 'live_news_unavailable', 120),
+      });
+    }
   }
 
   if (pathname === '/api/analytics/events' && req.method === 'GET') {

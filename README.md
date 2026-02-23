@@ -104,3 +104,6 @@ Acesse `http://localhost:4173`.
 
 - `script.js` agora gera o menu global a partir de uma única configuração (`NAV_LINKS`) e organiza o acesso com camada principal + `Mais` para seções secundárias.
 - Resultado: consistência de navegação em todas as páginas sem necessidade de editar manualmente cada HTML ao adicionar/remover rotas.
+
+- `server.js` expõe `/api/news/live` com dados reais via Spaceflight News API (cache local de 10 minutos para estabilidade).
+- `noticias.html` + `site.js` exibem cards de notícias em tempo real com link para a fonte oficial.

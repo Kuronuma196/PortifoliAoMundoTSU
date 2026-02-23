@@ -103,6 +103,35 @@
       .join('');
   }
 
+  async function renderLiveNews() {
+    const liveList = document.getElementById('live-news-list');
+    const status = document.getElementById('live-news-status');
+    if (!liveList || !status) return;
+
+    status.textContent = 'Carregando notícias reais...';
+    try {
+      const response = await fetch('/api/news/live');
+      if (!response.ok) throw new Error('live_news_request_failed');
+      const data = await response.json();
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (!items.length) throw new Error('live_news_empty');
+
+      liveList.innerHTML = items
+        .map((item) => {
+          const image = item.imageUrl
+            ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.title)}" loading="lazy" />`
+            : '';
+          return `<article class="panel news-card">${image}<p class="meta">${escapeHtml(item.source || 'Fonte externa')} • ${escapeHtml((item.publishedAt || '').slice(0, 10))}</p><h3><a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a></h3><p>${escapeHtml(item.summary || 'Resumo indisponível no provedor.')}</p></article>`;
+        })
+        .join('');
+
+      status.textContent = `Fonte: Spaceflight News API (${data.fetchedFrom === 'cache' ? 'cache local' : 'tempo real'}).`;
+    } catch (_) {
+      status.textContent = 'Não foi possível carregar notícias reais agora. Tente novamente em instantes.';
+      liveList.innerHTML = '';
+    }
+  }
+
   if (newsForm) {
     renderNewsSuggestions();
     newsForm.addEventListener('submit', async (ev) => {
@@ -148,4 +177,5 @@
   }
 
   hydrateHomeStats();
+  renderLiveNews();
 })();
