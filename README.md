@@ -107,3 +107,8 @@ Acesse `http://localhost:4173`.
 
 - `server.js` expõe `/api/news/live` com dados reais via Spaceflight News API (cache local de 10 minutos para estabilidade).
 - `noticias.html` + `site.js` exibem cards de notícias em tempo real com link para a fonte oficial.
+
+### Execução iniciada: Fase 10
+
+- `tests-smoke.js` adiciona validação automatizada de endpoints críticos (`/api/health`, `/api/security/status`, `/api/dashboard`, `/api/news/live`) e fluxo de escrita/leitura em `news-suggestions`.
+- Objetivo: criar baseline contínuo de qualidade para evitar regressões funcionais a cada nova fase.
