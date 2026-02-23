@@ -99,6 +99,9 @@ Acesse `http://localhost:4173`.
 - **Fase 8 — Arquitetura de navegação e IA de layout**: unificar menu por configuração central e reduzir manutenção manual entre páginas.
 - **Fase 9 — Conteúdo e dados reais**: integração com provedores reais de mídia (imagem/vídeo/áudio) e auditoria de fontes de dados.
 - **Fase 10 — Qualidade contínua**: testes E2E/regressão visual, monitoramento de erros e baseline de performance.
+- **Fase 11 — Observabilidade operacional**: status de runtime, cache, uso de memória e saúde de serviços para operação diária.
+- **Fase 12 — Dados externos expandidos**: ampliar provedores reais para mídia e conteúdo temático com rotas dedicadas e auditoria de qualidade.
+- **Fase 13 — Entrega contínua**: pipeline de validação automática, checklist de release e versionamento de mudanças.
 
 ### Execução iniciada: Fase 8
 
@@ -112,3 +115,8 @@ Acesse `http://localhost:4173`.
 
 - `tests-smoke.js` adiciona validação automatizada de endpoints críticos (`/api/health`, `/api/security/status`, `/api/dashboard`, `/api/news/live`) e fluxo de escrita/leitura em `news-suggestions`.
 - Objetivo: criar baseline contínuo de qualidade para evitar regressões funcionais a cada nova fase.
+
+### Execução iniciada: Fase 11
+
+- `server.js` expõe `/api/system/status` com dados operacionais do runtime (Node, uptime, memória, cache e contadores de dados).
+- `analises.html` + `analytics.js` mostram painel de status operacional para acompanhamento rápido da saúde do portal.

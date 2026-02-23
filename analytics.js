@@ -8,6 +8,7 @@
   const sharesEl = document.getElementById('metric-shares');
   const topPagesEl = document.getElementById('top-pages-list');
   const timelineEl = document.getElementById('timeline-list');
+  const runtimeStatusEl = document.getElementById('runtime-status');
   const refreshBtn = document.getElementById('refresh-analytics');
   const clearBtn = document.getElementById('clear-analytics');
   const exportBtn = document.getElementById('export-analytics');
@@ -32,6 +33,15 @@
   async function readSummary() {
     try {
       const r = await fetch('/api/analytics/summary');
+      if (r.ok) return await r.json();
+    } catch (_) {}
+    return null;
+  }
+
+
+  async function readRuntimeStatus() {
+    try {
+      const r = await fetch('/api/system/status');
       if (r.ok) return await r.json();
     } catch (_) {}
     return null;
@@ -68,6 +78,25 @@
         .join('');
       if (!timeline.length) {
         timelineEl.innerHTML = '<article class="panel"><p class="small-note">Sem tendência temporal disponível.</p></article>';
+      }
+    }
+
+    const runtime = await readRuntimeStatus();
+    if (runtimeStatusEl) {
+      if (runtime) {
+        const cards = [
+          { label: 'Node', value: runtime.runtime?.node || 'n/d' },
+          { label: 'Uptime (s)', value: String(runtime.runtime?.uptimeSeconds ?? 0) },
+          { label: 'Memória RSS (MB)', value: String(Math.round((runtime.runtime?.memory?.rss || 0) / 1024 / 1024)) },
+          { label: 'Cache live news', value: String(runtime.cache?.liveNewsCachedItems ?? 0) },
+          { label: 'Idade do cache (s)', value: String(runtime.cache?.liveNewsCacheAgeSeconds ?? 0) },
+          { label: 'Eventos analytics', value: String(runtime.counts?.analyticsEvents ?? 0) },
+        ];
+        runtimeStatusEl.innerHTML = cards
+          .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.label)}</p><p class="metric">${escapeHtml(item.value)}</p></article>`)
+          .join('');
+      } else {
+        runtimeStatusEl.innerHTML = '<article class="panel"><p class="small-note">Status operacional indisponível no momento.</p></article>';
       }
     }
 

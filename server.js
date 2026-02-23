@@ -198,6 +198,34 @@ async function getLiveNews() {
   }
 }
 
+
+function runtimeStatus() {
+  const db = readDb();
+  return {
+    phase: 11,
+    runtime: {
+      node: process.version,
+      uptimeSeconds: Math.floor(process.uptime()),
+      memory: {
+        rss: process.memoryUsage().rss,
+        heapUsed: process.memoryUsage().heapUsed,
+        heapTotal: process.memoryUsage().heapTotal,
+      },
+      platform: process.platform,
+    },
+    cache: {
+      liveNewsCachedItems: Array.isArray(liveNewsCache.data) ? liveNewsCache.data.length : 0,
+      liveNewsCacheAgeSeconds: liveNewsCache.fetchedAt ? Math.floor((Date.now() - liveNewsCache.fetchedAt) / 1000) : null,
+    },
+    counts: {
+      analyticsEvents: db.analyticsEvents.length,
+      newsSuggestions: db.newsSuggestions.length,
+      cmsArticles: db.cmsArticles.length,
+      notifications: db.notifications.length,
+    },
+  };
+}
+
 const mime = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -456,6 +484,11 @@ const server = http.createServer(async (req, res) => {
       topPages,
       timeline,
     });
+  }
+
+
+  if (pathname === '/api/system/status' && req.method === 'GET') {
+    return sendJson(res, 200, runtimeStatus());
   }
 
   if (pathname === '/api/dashboard' && req.method === 'GET') {
