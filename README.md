@@ -92,3 +92,15 @@ Acesse `http://localhost:4173`.
 ## Nota sobre dados
 
 - Evitamos URLs fictícias para mídia em produção local; respostas sem provedor integrado retornam `pending_provider_integration` para não simular dados irreais.
+
+
+## Próximas fases (ciclo pós-Fase 7)
+
+- **Fase 8 — Arquitetura de navegação e IA de layout**: unificar menu por configuração central e reduzir manutenção manual entre páginas.
+- **Fase 9 — Conteúdo e dados reais**: integração com provedores reais de mídia (imagem/vídeo/áudio) e auditoria de fontes de dados.
+- **Fase 10 — Qualidade contínua**: testes E2E/regressão visual, monitoramento de erros e baseline de performance.
+
+### Execução iniciada: Fase 8
+
+- `script.js` agora gera o menu global a partir de uma única configuração (`NAV_LINKS`) e organiza o acesso com camada principal + `Mais` para seções secundárias.
+- Resultado: consistência de navegação em todas as páginas sem necessidade de editar manualmente cada HTML ao adicionar/remover rotas.

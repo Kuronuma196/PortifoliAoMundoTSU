@@ -3,6 +3,27 @@ if (yearElement) yearElement.textContent = String(new Date().getFullYear());
 
 const STORAGE_KEY = 'tsu_analytics_events';
 
+const NAV_LINKS = {
+  primary: [
+    ['index.html', 'Início'],
+    ['personagens.html', 'Personagens'],
+    ['projetos.html', 'Projetos'],
+    ['cronologia.html', 'Cronologia'],
+    ['galeria.html', 'Galeria'],
+    ['noticias.html', 'Notícias'],
+    ['painel.html', 'Painel'],
+  ],
+  secondary: [
+    ['sobre.html', 'Sobre'],
+    ['analises.html', 'Análises'],
+    ['acesso.html', 'Acesso'],
+    ['cms.html', 'CMS'],
+    ['criacao.html', 'Criação'],
+    ['floryn.html', 'Floryn IA'],
+  ],
+  action: ['contato.html', 'Contato'],
+};
+
 function ensureToastRoot() {
   let root = document.getElementById('toast-root');
   if (root) return root;
@@ -26,30 +47,33 @@ function showToast(message, kind = 'info') {
   }, 2500);
 }
 
+function currentPage() {
+  const file = location.pathname.split('/').pop();
+  return file || 'index.html';
+}
+
+function makeLink(href, label, isButton = false) {
+  const a = document.createElement('a');
+  a.href = href;
+  a.textContent = label;
+  if (isButton) a.className = 'button ghost';
+  if (currentPage() === href) a.classList.add('active');
+  return a;
+}
+
 function setupTopbarLayout() {
   const topbar = document.querySelector('.topbar');
   const originalMenu = topbar?.querySelector('.menu-links');
   if (!topbar || !originalMenu || originalMenu.dataset.layoutReady === 'true') return;
 
-  const allLinks = Array.from(originalMenu.querySelectorAll('a'));
   const rowPrimary = document.createElement('div');
   rowPrimary.className = 'menu-row menu-primary';
+  NAV_LINKS.primary.forEach(([href, label]) => rowPrimary.appendChild(makeLink(href, label)));
 
   const rowSecondary = document.createElement('div');
   rowSecondary.className = 'menu-row menu-secondary';
-
-  const primaryLabels = new Set(['Início', 'Personagens', 'Projetos', 'Cronologia', 'Galeria', 'Notícias', 'Painel']);
-
-  allLinks.forEach((link) => {
-    if (link.classList.contains('button')) {
-      rowSecondary.appendChild(link);
-      return;
-    }
-
-    const label = (link.textContent || '').trim();
-    if (primaryLabels.has(label)) rowPrimary.appendChild(link);
-    else rowSecondary.appendChild(link);
-  });
+  NAV_LINKS.secondary.forEach(([href, label]) => rowSecondary.appendChild(makeLink(href, label)));
+  rowSecondary.appendChild(makeLink(NAV_LINKS.action[0], NAV_LINKS.action[1], true));
 
   const moreBtn = document.createElement('button');
   moreBtn.type = 'button';

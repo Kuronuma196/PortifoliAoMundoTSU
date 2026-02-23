@@ -602,6 +602,18 @@
       "page": "floryn.html",
       "detail": "Floryn IA | Atendimento Virtual TSU",
       "at": "2026-02-23T15:11:26.867Z"
+    },
+    {
+      "type": "page_view",
+      "page": "index.html",
+      "detail": "Tear's Studios Universe | Site Oficial",
+      "at": "2026-02-23T16:47:40.637Z"
+    },
+    {
+      "type": "page_view",
+      "page": "analises.html",
+      "detail": "Análises de Dados | TSU",
+      "at": "2026-02-23T16:47:46.253Z"
     }
   ],
   "auth": {
