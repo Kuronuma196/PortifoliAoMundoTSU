@@ -52,6 +52,13 @@ async function run() {
       assert(typeof liveNews.json.provider === 'string', 'live_news_provider_missing');
     }
 
+
+    const spaceMedia = await getJson('/api/media/space');
+    assert(spaceMedia.res.status === 200 || spaceMedia.res.status === 503, 'space_media_unexpected_status');
+    if (spaceMedia.res.status === 200) {
+      assert(Array.isArray(spaceMedia.json.items), 'space_media_items_not_array');
+      assert(typeof spaceMedia.json.provider === 'string', 'space_media_provider_missing');
+    }
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

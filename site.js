@@ -103,6 +103,34 @@
       .join('');
   }
 
+
+  async function renderSpaceMedia() {
+    const list = document.getElementById('space-media-list');
+    const status = document.getElementById('space-media-status');
+    if (!list || !status) return;
+
+    status.textContent = 'Carregando mídia externa...';
+    try {
+      const response = await fetch('/api/media/space');
+      if (!response.ok) throw new Error('space_media_request_failed');
+      const data = await response.json();
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (!items.length) throw new Error('space_media_empty');
+
+      list.innerHTML = items
+        .map((item) => {
+          const hdUrl = item.hdImageUrl || item.imageUrl;
+          return `<article class="panel news-card"><img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.title)}" loading="lazy" /><p class="meta">${escapeHtml(item.source || 'Fonte externa')} • ${escapeHtml(item.date || '')}</p><h3><a href="${escapeHtml(hdUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a></h3><p>${escapeHtml(item.description || 'Descrição indisponível.')}</p></article>`;
+        })
+        .join('');
+
+      status.textContent = `Fonte: ${data.provider === 'nasa_apod' ? 'NASA APOD' : 'Acervo TSU'} (${data.fetchedFrom === 'cache' ? 'cache local' : data.fetchedFrom === 'live' ? 'tempo real' : 'fallback local'}).`;
+    } catch (_) {
+      status.textContent = 'Não foi possível carregar o feed externo no momento.';
+      list.innerHTML = '';
+    }
+  }
+
   async function renderLiveNews() {
     const liveList = document.getElementById('live-news-list');
     const status = document.getElementById('live-news-status');
@@ -178,4 +206,5 @@
 
   hydrateHomeStats();
   renderLiveNews();
+  renderSpaceMedia();
 })();

@@ -15,7 +15,13 @@ const RATE_LIMIT = 60;
 const rateMap = new Map();
 const LIVE_NEWS_URL = 'https://api.spaceflightnewsapi.net/v4/articles/?limit=6&ordering=-published_at';
 const LIVE_NEWS_TTL_MS = 10 * 60 * 1000;
+const APOD_URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=6';
+const APOD_TTL_MS = 12 * 60 * 60 * 1000;
 const liveNewsCache = {
+  data: null,
+  fetchedAt: 0,
+};
+const apodCache = {
   data: null,
   fetchedAt: 0,
 };
@@ -199,6 +205,58 @@ async function getLiveNews() {
 }
 
 
+async function getSpaceMedia() {
+  const now = Date.now();
+  const fromCache = apodCache.data && now - apodCache.fetchedAt < APOD_TTL_MS;
+  if (fromCache) return { source: 'cache', items: apodCache.data };
+
+  try {
+    const payload = await readJsonFromUrl(APOD_URL);
+    const rows = Array.isArray(payload) ? payload : [payload];
+    const items = rows
+      .filter((item) => sanitizeText(item?.media_type, 20) === 'image')
+      .slice(0, 6)
+      .map((item) => ({
+        title: sanitizeText(item?.title, 220),
+        description: sanitizeText(item?.explanation, 520),
+        imageUrl: sanitizeText(item?.url, 1000),
+        hdImageUrl: sanitizeText(item?.hdurl, 1000),
+        date: sanitizeText(item?.date, 30),
+        copyright: sanitizeText(item?.copyright, 140),
+        source: 'NASA APOD',
+      }))
+      .filter((item) => item.title && item.imageUrl);
+
+    if (!items.length) throw new Error('upstream_empty_results');
+    apodCache.data = items;
+    apodCache.fetchedAt = now;
+    return { source: 'live', items };
+  } catch (_) {
+    const fallback = [
+      {
+        title: 'Universo TSU — visão principal',
+        description: 'Fallback local enquanto a fonte externa estiver indisponível.',
+        imageUrl: 'assets/images/hero-universe.svg',
+        hdImageUrl: '',
+        date: new Date().toISOString().slice(0, 10),
+        copyright: 'TSU',
+        source: 'Acervo TSU',
+      },
+      {
+        title: 'Identidade Visual TSU',
+        description: 'Recurso oficial da marca para manter continuidade visual.',
+        imageUrl: 'assets/images/logo-tsu.svg',
+        hdImageUrl: '',
+        date: new Date().toISOString().slice(0, 10),
+        copyright: 'TSU',
+        source: 'Acervo TSU',
+      },
+    ];
+    return { source: 'local_verified', items: fallback };
+  }
+}
+
+
 function runtimeStatus() {
   const db = readDb();
   return {
@@ -216,6 +274,8 @@ function runtimeStatus() {
     cache: {
       liveNewsCachedItems: Array.isArray(liveNewsCache.data) ? liveNewsCache.data.length : 0,
       liveNewsCacheAgeSeconds: liveNewsCache.fetchedAt ? Math.floor((Date.now() - liveNewsCache.fetchedAt) / 1000) : null,
+      apodCachedItems: Array.isArray(apodCache.data) ? apodCache.data.length : 0,
+      apodCacheAgeSeconds: apodCache.fetchedAt ? Math.floor((Date.now() - apodCache.fetchedAt) / 1000) : null,
     },
     counts: {
       analyticsEvents: db.analyticsEvents.length,
@@ -530,6 +590,24 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, 503, {
         error: 'live_news_unavailable',
         details: sanitizeText(error?.message || 'live_news_unavailable', 120),
+      });
+    }
+  }
+
+
+  if (pathname === '/api/media/space' && req.method === 'GET') {
+    try {
+      const data = await getSpaceMedia();
+      return sendJson(res, 200, {
+        phase: 12,
+        provider: data.source === 'live' || data.source === 'cache' ? 'nasa_apod' : 'local_tsu_data',
+        fetchedFrom: data.source,
+        items: data.items,
+      });
+    } catch (error) {
+      return sendJson(res, 503, {
+        error: 'space_media_unavailable',
+        details: sanitizeText(error?.message || 'space_media_unavailable', 120),
       });
     }
   }

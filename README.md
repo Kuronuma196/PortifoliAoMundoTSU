@@ -120,3 +120,10 @@ Acesse `http://localhost:4173`.
 
 - `server.js` expõe `/api/system/status` com dados operacionais do runtime (Node, uptime, memória, cache e contadores de dados).
 - `analises.html` + `analytics.js` mostram painel de status operacional para acompanhamento rápido da saúde do portal.
+
+
+### Execução iniciada: Fase 12
+
+- `server.js` expõe `/api/media/space` com integração de dados externos da NASA APOD e cache local de 12h.
+- `galeria.html` + `site.js` exibem feed espacial em tempo real com fallback validado para acervo TSU.
+- `tests-smoke.js` passa a validar o endpoint `/api/media/space` como parte da baseline contínua.
