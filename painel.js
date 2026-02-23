@@ -11,6 +11,7 @@
   const requestsList = document.getElementById('panel-requests-list');
   const notificationsList = document.getElementById('panel-notifications-list');
   const cmsList = document.getElementById('panel-cms-list');
+  const releaseStatusList = document.getElementById('panel-release-status');
   const refreshBtn = document.getElementById('panel-refresh');
   const exportBtn = document.getElementById('panel-export');
 
@@ -30,6 +31,15 @@
       newsSuggestions: JSON.parse(localStorage.getItem(newsKey) || '[]'),
       notifications: JSON.parse(localStorage.getItem('tsu_notifications') || '[]'),
     };
+  }
+
+
+  async function readReleaseStatus() {
+    try {
+      const r = await fetch('/api/release/status');
+      if (r.ok) return await r.json();
+    } catch (_) {}
+    return null;
   }
 
   async function readDashboard() {
@@ -90,6 +100,29 @@
         .join('');
       if (!data.notifications?.length) {
         notificationsList.innerHTML = '<article class="panel"><p class="small-note">Nenhuma notificação registrada até o momento.</p></article>';
+      }
+    }
+
+
+    const release = await readReleaseStatus();
+    if (releaseStatusList) {
+      if (release?.release) {
+        const info = [
+          { label: 'Versão', value: release.release.version },
+          { label: 'Score', value: `${release.release.score}%` },
+          { label: 'Pronto para release', value: release.release.ready ? 'Sim' : 'Não' },
+        ];
+
+        const checks = (release.release.checklist || []).slice(0, 6).map((item) => ({
+          label: item.id,
+          value: item.ok ? 'OK' : 'Pendente',
+        }));
+
+        releaseStatusList.innerHTML = [...info, ...checks]
+          .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.label)}</p><p class="metric">${escapeHtml(item.value)}</p></article>`)
+          .join('');
+      } else {
+        releaseStatusList.innerHTML = '<article class="panel"><p class="small-note">Status de release indisponível.</p></article>';
       }
     }
 

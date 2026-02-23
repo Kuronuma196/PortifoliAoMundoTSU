@@ -102,6 +102,8 @@ Acesse `http://localhost:4173`.
 - **Fase 11 — Observabilidade operacional**: status de runtime, cache, uso de memória e saúde de serviços para operação diária.
 - **Fase 12 — Dados externos expandidos**: ampliar provedores reais para mídia e conteúdo temático com rotas dedicadas e auditoria de qualidade.
 - **Fase 13 — Entrega contínua**: pipeline de validação automática, checklist de release e versionamento de mudanças.
+- **Fase 14 — Segurança aplicada**: endurecimento de acesso por perfil, trilha de auditoria e reforço de validações sensíveis.
+- **Fase 15 — Finalização de ciclo (FASE FINAL)**: estabilização final, revisão UX, checklist completo de publicação e fechamento do roadmap atual.
 
 ### Execução iniciada: Fase 8
 
@@ -127,3 +129,11 @@ Acesse `http://localhost:4173`.
 - `server.js` expõe `/api/media/space` com integração de dados externos da NASA APOD e cache local de 12h.
 - `galeria.html` + `site.js` exibem feed espacial em tempo real com fallback validado para acervo TSU.
 - `tests-smoke.js` passa a validar o endpoint `/api/media/space` como parte da baseline contínua.
+
+
+### Execução iniciada: Fase 13
+
+- `server.js` expõe `/api/release/status` com versão, score de checklist e prontidão de release.
+- `painel.html` + `painel.js` mostram um bloco de status de release para operação contínua.
+- `tests-smoke.js` valida o endpoint de release como parte da baseline automática.
+- **Próximo marco de destaque:** Fase 14 (penúltima) e depois Fase 15 (**FASE FINAL** deste ciclo).

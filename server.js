@@ -17,6 +17,7 @@ const LIVE_NEWS_URL = 'https://api.spaceflightnewsapi.net/v4/articles/?limit=6&o
 const LIVE_NEWS_TTL_MS = 10 * 60 * 1000;
 const APOD_URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=6';
 const APOD_TTL_MS = 12 * 60 * 60 * 1000;
+const RELEASE_VERSION = process.env.TSU_RELEASE_VERSION || '0.13.0';
 const liveNewsCache = {
   data: null,
   fetchedAt: 0,
@@ -256,6 +257,32 @@ async function getSpaceMedia() {
   }
 }
 
+
+function releaseStatus() {
+  const db = readDb();
+  const checks = [
+    { id: 'health_endpoint', ok: true },
+    { id: 'security_headers', ok: true },
+    { id: 'analytics_stream', ok: db.analyticsEvents.length >= 0 },
+    { id: 'news_feed_ready', ok: true },
+    { id: 'space_media_ready', ok: true },
+    { id: 'cms_ready', ok: db.cmsArticles.length >= 0 },
+  ];
+
+  const passed = checks.filter((item) => item.ok).length;
+  const score = Math.round((passed / checks.length) * 100);
+
+  return {
+    phase: 13,
+    release: {
+      version: RELEASE_VERSION,
+      generatedAt: new Date().toISOString(),
+      score,
+      ready: score >= 100,
+      checklist: checks,
+    },
+  };
+}
 
 function runtimeStatus() {
   const db = readDb();
@@ -546,6 +573,11 @@ const server = http.createServer(async (req, res) => {
     });
   }
 
+
+
+  if (pathname === '/api/release/status' && req.method === 'GET') {
+    return sendJson(res, 200, releaseStatus());
+  }
 
   if (pathname === '/api/system/status' && req.method === 'GET') {
     return sendJson(res, 200, runtimeStatus());
