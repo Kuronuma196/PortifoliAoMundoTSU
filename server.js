@@ -18,6 +18,7 @@ const LIVE_NEWS_TTL_MS = 10 * 60 * 1000;
 const APOD_URL = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&count=6';
 const APOD_TTL_MS = 12 * 60 * 60 * 1000;
 const RELEASE_VERSION = process.env.TSU_RELEASE_VERSION || '0.13.0';
+const ADMIN_KEY = process.env.TSU_ADMIN_KEY || 'tsu-local-admin';
 const liveNewsCache = {
   data: null,
   fetchedAt: 0,
@@ -35,6 +36,7 @@ const defaultDb = {
   notifications: [],
   cmsArticles: [],
   creationJobs: [],
+  auditLogs: [],
   auth: {
     employeeWhitelist: ['kuronumadeal@gmail.com'],
   },
@@ -52,6 +54,7 @@ function readDb() {
   if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
   if (!Array.isArray(parsed.cmsArticles)) parsed.cmsArticles = [];
   if (!Array.isArray(parsed.creationJobs)) parsed.creationJobs = [];
+  if (!Array.isArray(parsed.auditLogs)) parsed.auditLogs = [];
   if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
     parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
   }
@@ -79,6 +82,35 @@ function sendJson(res, code, data) {
 
 function sanitizeText(value, max = 3000) {
   return String(value || '').trim().slice(0, max);
+}
+
+
+
+function addAuditLog(entry) {
+  const db = readDb();
+  db.auditLogs.push({
+    at: new Date().toISOString(),
+    action: sanitizeText(entry?.action, 120),
+    path: sanitizeText(entry?.path, 160),
+    actor: sanitizeText(entry?.actor, 120),
+    status: sanitizeText(entry?.status, 40),
+    detail: sanitizeText(entry?.detail, 240),
+  });
+  db.auditLogs = db.auditLogs.slice(-2000);
+  writeDb(db);
+}
+
+function requireAdmin(req, res, action) {
+  const provided = sanitizeText(req.headers['x-tsu-admin-key'], 200);
+  const actor = sanitizeText(req.headers['x-tsu-actor'], 120) || 'unknown';
+  if (provided && provided === ADMIN_KEY) {
+    addAuditLog({ action, path: req.url, actor, status: 'granted', detail: 'admin_key_valid' });
+    return true;
+  }
+
+  addAuditLog({ action, path: req.url, actor, status: 'denied', detail: 'invalid_or_missing_admin_key' });
+  sendJson(res, 403, { error: 'Acesso negado para operação administrativa.' });
+  return false;
 }
 
 function allowRateLimit(req) {
@@ -267,6 +299,7 @@ function releaseStatus() {
     { id: 'news_feed_ready', ok: true },
     { id: 'space_media_ready', ok: true },
     { id: 'cms_ready', ok: db.cmsArticles.length >= 0 },
+    { id: 'admin_key_guard', ok: Boolean(ADMIN_KEY) },
   ];
 
   const passed = checks.filter((item) => item.ok).length;
@@ -309,6 +342,7 @@ function runtimeStatus() {
       newsSuggestions: db.newsSuggestions.length,
       cmsArticles: db.cmsArticles.length,
       notifications: db.notifications.length,
+      auditLogs: db.auditLogs.length,
     },
   };
 }
@@ -373,6 +407,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/notifications' && req.method === 'POST') {
+    if (!requireAdmin(req, res, 'create_notification')) return;
     const payload = await parseBody(req).catch(() => null);
     const title = sanitizeText(payload?.title, 120);
     const message = sanitizeText(payload?.message, 1200);
@@ -431,6 +466,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (pathname === '/api/cms/articles' && req.method === 'POST') {
+    if (!requireAdmin(req, res, 'create_cms_article')) return;
     const payload = await parseBody(req).catch(() => null);
     const title = sanitizeText(payload?.title, 160);
     const category = sanitizeText(payload?.category, 80);
@@ -462,6 +498,7 @@ const server = http.createServer(async (req, res) => {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,
         notifications: db.notifications.length,
+      auditLogs: db.auditLogs.length,
       },
       latestArticles: db.cmsArticles.slice(-6).reverse(),
       latestSuggestions: db.newsSuggestions.slice(-6).reverse(),
@@ -583,6 +620,14 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 200, runtimeStatus());
   }
 
+
+  if (pathname === '/api/security/audit' && req.method === 'GET') {
+    if (!requireAdmin(req, res, 'read_security_audit')) return;
+    const db = readDb();
+    const limit = Math.min(Number(url.searchParams.get('limit') || 100), 500);
+    return sendJson(res, 200, db.auditLogs.slice(-limit).reverse());
+  }
+
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
@@ -593,6 +638,7 @@ const server = http.createServer(async (req, res) => {
         roleRequests: db.roleRequests.length,
         analyticsEvents: db.analyticsEvents.length,
         notifications: db.notifications.length,
+      auditLogs: db.auditLogs.length,
         cmsArticles: db.cmsArticles.length,
         creationJobs: db.creationJobs.length,
       },

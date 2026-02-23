@@ -137,3 +137,12 @@ Acesse `http://localhost:4173`.
 - `painel.html` + `painel.js` mostram um bloco de status de release para operação contínua.
 - `tests-smoke.js` valida o endpoint de release como parte da baseline automática.
 - **Próximo marco de destaque:** Fase 14 (penúltima) e depois Fase 15 (**FASE FINAL** deste ciclo).
+
+
+### Execução iniciada: Fase 14
+
+- `server.js` agora protege operações sensíveis (`POST /api/cms/articles`, `POST /api/notifications`) com chave administrativa via header `x-tsu-admin-key`.
+- `server.js` adiciona trilha de auditoria (`auditLogs`) e endpoint protegido `GET /api/security/audit` para inspeção de tentativas permitidas/negadas.
+- `cms.html` + `cms.js` receberam campo de chave administrativa para publicação segura no CMS.
+- `tests-smoke.js` valida cenários de negação sem chave e sucesso com chave administrativa.
+- **Próxima etapa:** Fase 15 (**FASE FINAL**) para estabilização, revisão UX final e fechamento do ciclo.

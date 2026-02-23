@@ -8,6 +8,7 @@
   const categoryInput = document.getElementById('cms-category');
   const statusInput = document.getElementById('cms-status');
   const contentInput = document.getElementById('cms-content');
+  const adminKeyInput = document.getElementById('cms-admin-key');
 
   const countArticles = document.getElementById('cms-count-articles');
   const countSuggestions = document.getElementById('cms-count-suggestions');
@@ -21,6 +22,21 @@
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#039;');
+  }
+
+
+
+  function cmsAuthHeaders() {
+    const key = adminKeyInput?.value?.trim() || localStorage.getItem('tsu_cms_admin_key') || '';
+    const actor = localStorage.getItem('tsu_last_user_email') || 'Equipe TSU';
+    if (key && adminKeyInput?.value?.trim()) {
+      localStorage.setItem('tsu_cms_admin_key', key);
+    }
+    return {
+      'Content-Type': 'application/json',
+      'x-tsu-admin-key': key,
+      'x-tsu-actor': actor,
+    };
   }
 
   async function fetchOverview() {
@@ -38,10 +54,10 @@
   async function createArticle(payload) {
     const r = await fetch('/api/cms/articles', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: cmsAuthHeaders(),
       body: JSON.stringify(payload),
     });
-    return r.ok;
+    return { ok: r.ok, status: r.status };
   }
 
   async function renderOverview() {
@@ -100,9 +116,9 @@
 
     if (!payload.title || !payload.category || !payload.content) return;
 
-    const ok = await createArticle(payload);
-    if (!ok) {
-      if (feedback) feedback.textContent = 'Não foi possível salvar no backend.';
+    const result = await createArticle(payload);
+    if (!result.ok) {
+      if (feedback) feedback.textContent = result.status === 403 ? 'Acesso negado: informe chave administrativa válida.' : 'Não foi possível salvar no backend.';
       return;
     }
 

@@ -64,6 +64,24 @@ async function run() {
     assert(releaseStatus.res.status === 200, 'release_status_not_200');
     assert(typeof releaseStatus.json?.release?.version === 'string', 'release_version_missing');
     assert(Array.isArray(releaseStatus.json?.release?.checklist), 'release_checklist_invalid');
+
+    const cmsDenied = await fetch(`${BASE_URL}/api/cms/articles`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'x', category: 'Comunicado', content: 'x', status: 'draft' }),
+    });
+    assert(cmsDenied.status === 403, 'cms_post_should_be_forbidden_without_admin_key');
+
+    const cmsAllowed = await fetch(`${BASE_URL}/api/cms/articles`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-tsu-admin-key': 'tsu-local-admin',
+        'x-tsu-actor': 'smoke@local',
+      },
+      body: JSON.stringify({ title: `Smoke CMS ${Date.now()}`, category: 'Comunicado', content: 'Validação fase 14.', status: 'draft' }),
+    });
+    assert(cmsAllowed.status === 201, 'cms_post_should_succeed_with_admin_key');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',
