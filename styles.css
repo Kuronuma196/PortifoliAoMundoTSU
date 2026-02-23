@@ -288,3 +288,6 @@ p { color: var(--muted); }
     grid-template-columns: 1fr;
   }
 }
+
+.section .small-note { margin-top: 0.3rem; }
+#home-final-status .panel { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }

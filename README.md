@@ -146,3 +146,11 @@ Acesse `http://localhost:4173`.
 - `cms.html` + `cms.js` receberam campo de chave administrativa para publicação segura no CMS.
 - `tests-smoke.js` valida cenários de negação sem chave e sucesso com chave administrativa.
 - **Próxima etapa:** Fase 15 (**FASE FINAL**) para estabilização, revisão UX final e fechamento do ciclo.
+
+
+### Execução iniciada: Fase 15 (FASE FINAL)
+
+- `server.js` expõe `/api/final/status` com checklist consolidada de fechamento do ciclo atual.
+- `index.html` + `site.js` exibem painel final de progresso para acompanhamento de encerramento do roadmap.
+- `tests-smoke.js` valida também `/api/final/status` para garantir qualidade até o fechamento.
+- Referências de mercado consideradas: arquitetura de status/checklist inspirada em dashboards operacionais modernos (status page + release readiness).

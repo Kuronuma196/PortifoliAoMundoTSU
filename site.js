@@ -104,6 +104,35 @@
   }
 
 
+
+
+  async function renderFinalStatus() {
+    const box = document.getElementById('home-final-status');
+    if (!box) return;
+    try {
+      const r = await fetch('/api/final/status');
+      if (!r.ok) throw new Error('final_status_failed');
+      const data = await r.json();
+      const final = data?.final;
+      if (!final) throw new Error('final_status_empty');
+
+      const cards = [
+        { label: 'Fase', value: String(data.phase || 15) },
+        { label: 'Progresso', value: `${final.progress || 0}%` },
+        { label: 'Checklist', value: `${final.completedChecks || 0}/${final.totalChecks || 0}` },
+        { label: 'Audit logs', value: String(final.highlights?.auditLogs || 0) },
+        { label: 'Eventos', value: String(final.highlights?.analyticsEvents || 0) },
+        { label: 'Ciclo pronto', value: final.readyToCloseCycle ? 'Sim' : 'Não' },
+      ];
+
+      box.innerHTML = cards
+        .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.label)}</p><p class="metric">${escapeHtml(item.value)}</p></article>`)
+        .join('');
+    } catch (_) {
+      box.innerHTML = '<article class="panel"><p class="small-note">Status final indisponível no momento.</p></article>';
+    }
+  }
+
   async function renderSpaceMedia() {
     const list = document.getElementById('space-media-list');
     const status = document.getElementById('space-media-status');
@@ -207,4 +236,5 @@
   hydrateHomeStats();
   renderLiveNews();
   renderSpaceMedia();
+  renderFinalStatus();
 })();

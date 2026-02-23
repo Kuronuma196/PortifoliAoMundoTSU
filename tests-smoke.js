@@ -82,6 +82,10 @@ async function run() {
       body: JSON.stringify({ title: `Smoke CMS ${Date.now()}`, category: 'Comunicado', content: 'Validação fase 14.', status: 'draft' }),
     });
     assert(cmsAllowed.status === 201, 'cms_post_should_succeed_with_admin_key');
+
+    const finalStatus = await getJson('/api/final/status');
+    assert(finalStatus.res.status === 200, 'final_status_not_200');
+    assert(typeof finalStatus.json?.final?.progress === 'number', 'final_status_progress_invalid');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',
