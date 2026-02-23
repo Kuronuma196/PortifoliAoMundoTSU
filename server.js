@@ -15,6 +15,7 @@ const defaultDb = {
   analyticsEvents: [],
   notifications: [],
   cmsArticles: [],
+  creationJobs: [],
   auth: {
     employeeWhitelist: ['kuronumadeal@gmail.com'],
   },
@@ -31,6 +32,7 @@ function readDb() {
   if (!Array.isArray(parsed.analyticsEvents)) parsed.analyticsEvents = [];
   if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
   if (!Array.isArray(parsed.cmsArticles)) parsed.cmsArticles = [];
+  if (!Array.isArray(parsed.creationJobs)) parsed.creationJobs = [];
   if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
     parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
   }
@@ -90,7 +92,7 @@ const server = http.createServer(async (req, res) => {
   const { pathname } = url;
 
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 4, message: 'Fase 4 ativa: CMS/admin interno + melhorias visuais' });
+    return sendJson(res, 200, { ok: true, phase: 5, message: 'Fase 5 ativa: criação multimídia produção + design unificado' });
   }
 
   if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
@@ -125,6 +127,56 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 201, { ok: true });
   }
 
+
+
+  if (pathname === '/api/creation/generate' && req.method === 'POST') {
+    const payload = await parseBody(req).catch(() => null);
+    if (!payload || !payload.type || !payload.prompt) {
+      return sendJson(res, 400, { error: 'Dados inválidos' });
+    }
+
+    const type = String(payload.type).trim().toLowerCase();
+    const prompt = String(payload.prompt).trim();
+    const job = {
+      id: `job_${Date.now()}`,
+      type,
+      prompt,
+      at: new Date().toISOString(),
+      status: 'completed',
+      output: {},
+    };
+
+    if (type === 'text') {
+      job.output = {
+        text: `Versão inicial gerada para: ${prompt}`,
+        excerpt: `Resumo criativo: ${prompt.slice(0, 140)}`,
+      };
+    } else if (type === 'image') {
+      job.output = {
+        url: 'assets/images/hero-universe.svg',
+        caption: `Conceito visual para: ${prompt}`,
+      };
+    } else if (type === 'video') {
+      job.output = {
+        url: 'https://example.com/video-demo-tsu',
+        storyboard: `Storyboard base para: ${prompt}`,
+      };
+    } else if (type === 'audio') {
+      job.output = {
+        url: 'https://example.com/audio-demo-tsu',
+        notes: `Guia sonoro para: ${prompt}`,
+      };
+    } else {
+      return sendJson(res, 400, { error: 'Tipo de geração inválido' });
+    }
+
+    const db = readDb();
+    db.creationJobs.push(job);
+    db.creationJobs = db.creationJobs.slice(-500);
+    writeDb(db);
+    return sendJson(res, 201, { ok: true, jobId: job.id, output: job.output, phase: 5 });
+  }
+
   if (pathname === '/api/cms/articles' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, db.cmsArticles.slice(-80).reverse());
@@ -155,7 +207,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/cms/overview' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 4,
+      phase: 5,
       counts: {
         articles: db.cmsArticles.length,
         contacts: db.contacts.length,
@@ -211,7 +263,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 4,
+      phase: 5,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,
@@ -219,11 +271,13 @@ const server = http.createServer(async (req, res) => {
         analyticsEvents: db.analyticsEvents.length,
         notifications: db.notifications.length,
         cmsArticles: db.cmsArticles.length,
+        creationJobs: db.creationJobs.length,
       },
       latestRoleRequests: db.roleRequests.slice(-8).reverse(),
       latestNews: db.newsSuggestions.slice(-8).reverse(),
       latestNotifications: db.notifications.slice(-8).reverse(),
       latestArticles: db.cmsArticles.slice(-8).reverse(),
+      latestCreations: db.creationJobs.slice(-8).reverse(),
     });
   }
 

@@ -38,6 +38,7 @@
       analyticsEvents: document.getElementById('home-count-events'),
       notifications: document.getElementById('home-count-notifications'),
       cmsArticles: document.getElementById('home-count-articles'),
+      creationJobs: document.getElementById('home-count-creations'),
     };
 
     try {

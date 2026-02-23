@@ -64,10 +64,12 @@ Acesse `http://localhost:4173`.
 - Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.
 
 
-## Fase 4 — CMS/admin interno e evolução de design
+## Fase 5 — Criação multimídia produção e organização de design
 
 - `server.js` fornece API HTTP + servidor estático com persistência em `data/db.json`.
-- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`, `/api/auth/employee-whitelist`, `/api/notifications`, `/api/cms/articles`, `/api/cms/overview`.
+- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`, `/api/auth/employee-whitelist`, `/api/notifications`, `/api/cms/articles`, `/api/cms/overview`, `/api/creation/generate`.
 - `cms.html` + `cms.js` implementam painel de criação de artigos internos com indicadores operacionais.
-- `painel.js` e `index.html` passaram a exibir métricas de artigos CMS.
-- `styles.css` recebeu nova rodada de refinamento visual (tipografia do menu, microinterações, equilíbrio de grids e leitura).
+- `criacao.html` + `criacao.js` implementam fluxo unificado para geração de texto, imagem, vídeo e áudio com histórico recente.
+- `server.js` adiciona endpoint `/api/creation/generate` e telemetria de `creationJobs` no dashboard.
+- `painel.js` e `index.html` exibem métricas operacionais ampliadas para CMS e criação.
+- `styles.css` recebeu organização visual inspirada em portais modernos mantendo identidade TSU (navegação em chips, hierarquia e consistência de seções).
