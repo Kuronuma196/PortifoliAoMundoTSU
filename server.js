@@ -92,7 +92,7 @@ const server = http.createServer(async (req, res) => {
   const { pathname } = url;
 
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 5, message: 'Fase 5 ativa: criação multimídia produção + design unificado' });
+    return sendJson(res, 200, { ok: true, phase: 6, message: 'Fase 6 ativa: observabilidade real + design de navegação refinado' });
   }
 
   if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
@@ -174,7 +174,7 @@ const server = http.createServer(async (req, res) => {
     db.creationJobs.push(job);
     db.creationJobs = db.creationJobs.slice(-500);
     writeDb(db);
-    return sendJson(res, 201, { ok: true, jobId: job.id, output: job.output, phase: 5 });
+    return sendJson(res, 201, { ok: true, jobId: job.id, output: job.output, phase: 6 });
   }
 
   if (pathname === '/api/cms/articles' && req.method === 'GET') {
@@ -207,7 +207,7 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/cms/overview' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 5,
+      phase: 6,
       counts: {
         articles: db.cmsArticles.length,
         contacts: db.contacts.length,
@@ -260,10 +260,55 @@ const server = http.createServer(async (req, res) => {
     return sendJson(res, 201, { ok: true });
   }
 
+
+
+  if (pathname === '/api/analytics/summary' && req.method === 'GET') {
+    const db = readDb();
+    const events = db.analyticsEvents || [];
+    const byType = {};
+    const byPage = {};
+
+    events.forEach((event) => {
+      const type = String(event.type || 'unknown');
+      const page = String(event.page || 'unknown');
+      byType[type] = (byType[type] || 0) + 1;
+      byPage[page] = (byPage[page] || 0) + 1;
+    });
+
+    const topPages = Object.entries(byPage)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6)
+      .map(([page, count]) => ({ page, count }));
+
+    const recent = events.slice(-40);
+    const days = {};
+    recent.forEach((event) => {
+      const day = String(event.at || '').slice(0, 10) || 'sem-data';
+      days[day] = (days[day] || 0) + 1;
+    });
+
+    const timeline = Object.entries(days)
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([day, count]) => ({ day, count }));
+
+    return sendJson(res, 200, {
+      phase: 6,
+      totals: {
+        events: events.length,
+        pageViews: byType.page_view || 0,
+        clicks: byType.click || 0,
+        shares: (byType.share || 0) + (byType.share_copy_link || 0),
+      },
+      byType,
+      topPages,
+      timeline,
+    });
+  }
+
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 5,
+      phase: 6,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,

@@ -26,11 +26,44 @@ function showToast(message, kind = 'info') {
   }, 2500);
 }
 
+function setupTopbarLayout() {
+  const topbar = document.querySelector('.topbar');
+  const originalMenu = topbar?.querySelector('.menu-links');
+  if (!topbar || !originalMenu || originalMenu.dataset.layoutReady === 'true') return;
+
+  const allLinks = Array.from(originalMenu.querySelectorAll('a'));
+  const rowPrimary = document.createElement('div');
+  rowPrimary.className = 'menu-row menu-primary';
+
+  const rowSecondary = document.createElement('div');
+  rowSecondary.className = 'menu-row menu-secondary';
+
+  const primaryLabels = new Set(['Início', 'Personagens', 'Projetos', 'Cronologia', 'Galeria', 'Sobre', 'Notícias', 'Análises', 'Acesso', 'Painel']);
+
+  allLinks.forEach((link) => {
+    if (link.classList.contains('button')) {
+      rowSecondary.appendChild(link);
+      return;
+    }
+
+    const label = (link.textContent || '').trim();
+    if (primaryLabels.has(label)) rowPrimary.appendChild(link);
+    else rowSecondary.appendChild(link);
+  });
+
+  originalMenu.innerHTML = '';
+  originalMenu.classList.add('menu-layout');
+  originalMenu.appendChild(rowPrimary);
+  originalMenu.appendChild(rowSecondary);
+  originalMenu.dataset.layoutReady = 'true';
+}
+
 function setupThemeToggle() {
   const saved = localStorage.getItem('tsu_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
 
   const topbar = document.querySelector('.topbar');
+  const menuSecondary = document.querySelector('.menu-secondary');
   if (!topbar || topbar.querySelector('.theme-toggle')) return;
 
   const btn = document.createElement('button');
@@ -53,7 +86,8 @@ function setupThemeToggle() {
   });
 
   syncLabel();
-  topbar.appendChild(btn);
+  if (menuSecondary) menuSecondary.appendChild(btn);
+  else topbar.appendChild(btn);
 }
 
 function setupMenuToggle() {
@@ -102,6 +136,7 @@ function pushEvent(type, detail = '') {
   persistEvent(event);
 }
 
+setupTopbarLayout();
 setupThemeToggle();
 setupMenuToggle();
 pushEvent('page_view', document.title);

@@ -350,6 +350,90 @@
       "type": "page_view",
       "page": "floryn.html",
       "detail": "Floryn IA | Atendimento Virtual TSU"
+    },
+    {
+      "at": "2026-02-23T14:37:47.910Z",
+      "type": "page_view",
+      "page": "index.html",
+      "detail": "Tear's Studios Universe | Site Oficial"
+    },
+    {
+      "at": "2026-02-23T14:37:51.904Z",
+      "type": "page_view",
+      "page": "personagens.html",
+      "detail": "Personagens | TSU"
+    },
+    {
+      "at": "2026-02-23T14:37:53.521Z",
+      "type": "page_view",
+      "page": "projetos.html",
+      "detail": "Projetos | TSU"
+    },
+    {
+      "at": "2026-02-23T14:37:55.128Z",
+      "type": "page_view",
+      "page": "cronologia.html",
+      "detail": "Cronologia | TSU"
+    },
+    {
+      "at": "2026-02-23T14:37:56.727Z",
+      "type": "page_view",
+      "page": "galeria.html",
+      "detail": "Galeria | TSU"
+    },
+    {
+      "at": "2026-02-23T14:37:58.409Z",
+      "type": "page_view",
+      "page": "sobre.html",
+      "detail": "Sobre | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:00.004Z",
+      "type": "page_view",
+      "page": "contato.html",
+      "detail": "Contato | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:01.487Z",
+      "type": "page_view",
+      "page": "acesso.html",
+      "detail": "Acesso e Login | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:03.101Z",
+      "type": "page_view",
+      "page": "noticias.html",
+      "detail": "Notícias | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:04.700Z",
+      "type": "page_view",
+      "page": "analises.html",
+      "detail": "Análises de Dados | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:06.316Z",
+      "type": "page_view",
+      "page": "painel.html",
+      "detail": "Painel Operacional | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:07.820Z",
+      "type": "page_view",
+      "page": "cms.html",
+      "detail": "CMS Interno | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:09.284Z",
+      "type": "page_view",
+      "page": "criacao.html",
+      "detail": "Criação Pública | TSU"
+    },
+    {
+      "at": "2026-02-23T14:38:10.828Z",
+      "type": "page_view",
+      "page": "floryn.html",
+      "detail": "Floryn IA | Atendimento Virtual TSU"
     }
   ],
   "auth": {
@@ -398,6 +482,17 @@
       "output": {
         "text": "Versão inicial gerada para: Manifesto visual da fase 5",
         "excerpt": "Resumo criativo: Manifesto visual da fase 5"
+      }
+    },
+    {
+      "id": "job_1771857434147",
+      "type": "audio",
+      "prompt": "Tema de abertura TSU",
+      "at": "2026-02-23T14:37:14.147Z",
+      "status": "completed",
+      "output": {
+        "url": "https://example.com/audio-demo-tsu",
+        "notes": "Guia sonoro para: Tema de abertura TSU"
       }
     }
   ]

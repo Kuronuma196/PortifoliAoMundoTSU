@@ -4,9 +4,22 @@
   const viewsEl = document.getElementById('metric-pageviews');
   const clicksEl = document.getElementById('metric-clicks');
   const uniqueEl = document.getElementById('metric-unique');
+  const totalEl = document.getElementById('metric-total');
+  const sharesEl = document.getElementById('metric-shares');
+  const topPagesEl = document.getElementById('top-pages-list');
+  const timelineEl = document.getElementById('timeline-list');
   const refreshBtn = document.getElementById('refresh-analytics');
   const clearBtn = document.getElementById('clear-analytics');
   const exportBtn = document.getElementById('export-analytics');
+
+  function escapeHtml(text) {
+    return String(text || '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#039;');
+  }
 
   async function readEvents() {
     try {
@@ -16,20 +29,55 @@
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   }
 
+  async function readSummary() {
+    try {
+      const r = await fetch('/api/analytics/summary');
+      if (r.ok) return await r.json();
+    } catch (_) {}
+    return null;
+  }
+
   async function render() {
     const events = await readEvents();
     const pageViews = events.filter((e) => e.type === 'page_view').length;
     const clicks = events.filter((e) => e.type === 'click').length;
     const uniquePages = new Set(events.map((e) => e.page)).size;
+    const shares = events.filter((e) => e.type === 'share' || e.type === 'share_copy_link').length;
 
     if (viewsEl) viewsEl.textContent = String(pageViews);
     if (clicksEl) clicksEl.textContent = String(clicks);
     if (uniqueEl) uniqueEl.textContent = String(uniquePages);
+    if (totalEl) totalEl.textContent = String(events.length);
+    if (sharesEl) sharesEl.textContent = String(shares);
+
+    const summary = await readSummary();
+    const topPages = summary?.topPages || [];
+    if (topPagesEl) {
+      topPagesEl.innerHTML = topPages
+        .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.page)}</p><p class="metric">${item.count}</p></article>`)
+        .join('');
+      if (!topPages.length) {
+        topPagesEl.innerHTML = '<article class="panel"><p class="small-note">Sem dados de páginas ainda.</p></article>';
+      }
+    }
+
+    const timeline = summary?.timeline || [];
+    if (timelineEl) {
+      timelineEl.innerHTML = timeline
+        .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.day)}</p><p class="metric">${item.count}</p></article>`)
+        .join('');
+      if (!timeline.length) {
+        timelineEl.innerHTML = '<article class="panel"><p class="small-note">Sem tendência temporal disponível.</p></article>';
+      }
+    }
 
     if (eventsBody) {
       const last = events.slice(-25).reverse();
       eventsBody.innerHTML = last
-        .map((e) => `<tr><td>${new Date(e.at).toLocaleString()}</td><td>${e.type}</td><td>${e.page}</td><td>${e.detail || ''}</td></tr>`)
+        .map(
+          (e) =>
+            `<tr><td>${new Date(e.at).toLocaleString()}</td><td>${escapeHtml(e.type)}</td><td>${escapeHtml(e.page)}</td><td>${escapeHtml(e.detail || '')}</td></tr>`
+        )
         .join('');
     }
   }
