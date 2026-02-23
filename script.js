@@ -38,7 +38,7 @@ function setupTopbarLayout() {
   const rowSecondary = document.createElement('div');
   rowSecondary.className = 'menu-row menu-secondary';
 
-  const primaryLabels = new Set(['Início', 'Personagens', 'Projetos', 'Cronologia', 'Galeria', 'Sobre', 'Notícias', 'Análises', 'Acesso', 'Painel']);
+  const primaryLabels = new Set(['Início', 'Personagens', 'Projetos', 'Cronologia', 'Galeria', 'Notícias', 'Painel']);
 
   allLinks.forEach((link) => {
     if (link.classList.contains('button')) {
@@ -50,6 +50,26 @@ function setupTopbarLayout() {
     if (primaryLabels.has(label)) rowPrimary.appendChild(link);
     else rowSecondary.appendChild(link);
   });
+
+  const moreBtn = document.createElement('button');
+  moreBtn.type = 'button';
+  moreBtn.className = 'button ghost menu-more-toggle';
+  moreBtn.textContent = 'Mais';
+  moreBtn.setAttribute('aria-expanded', 'false');
+  moreBtn.setAttribute('data-track', 'menu_more_toggle');
+
+  const hasActiveSecondary = Array.from(rowSecondary.querySelectorAll('a')).some((a) => a.classList.contains('active'));
+  if (hasActiveSecondary) {
+    rowSecondary.classList.add('open');
+    moreBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  moreBtn.addEventListener('click', () => {
+    const open = rowSecondary.classList.toggle('open');
+    moreBtn.setAttribute('aria-expanded', String(open));
+  });
+
+  rowPrimary.appendChild(moreBtn);
 
   originalMenu.innerHTML = '';
   originalMenu.classList.add('menu-layout');

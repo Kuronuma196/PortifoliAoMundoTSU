@@ -81,3 +81,14 @@ Acesse `http://localhost:4173`.
 - `server.js` aplica hardening base (headers de segurança, limite de payload, sanitização de entradas e rate limit em POST).
 - `script.js` + `styles.css` estabilizam a navegação em duas camadas para acesso rápido a todas as páginas sem quebra visual.
 - `analises.html` + `analytics.js` seguem como centro de observabilidade com resumo real e histórico recente.
+
+
+## Estratégia de menu (escala de páginas)
+
+- Navegação em duas camadas: linha primária para páginas de uso frequente e linha secundária em “Mais” para áreas complementares.
+- Em mobile, o menu abre completo com prioridade de leitura da esquerda para direita.
+- Essa estratégia reduz poluição visual, melhora foco de navegação e mantém todas as páginas acessíveis.
+
+## Nota sobre dados
+
+- Evitamos URLs fictícias para mídia em produção local; respostas sem provedor integrado retornam `pending_provider_integration` para não simular dados irreais.

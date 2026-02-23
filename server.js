@@ -207,9 +207,9 @@ const server = http.createServer(async (req, res) => {
     } else if (type === 'image') {
       job.output = { url: 'assets/images/hero-universe.svg', caption: `Conceito visual para: ${prompt}` };
     } else if (type === 'video') {
-      job.output = { url: 'https://example.com/video-demo-tsu', storyboard: `Storyboard base para: ${prompt}` };
+      job.output = { status: 'pending_provider_integration', storyboard: `Storyboard base para: ${prompt}`, provider: null };
     } else if (type === 'audio') {
-      job.output = { url: 'https://example.com/audio-demo-tsu', notes: `Guia sonoro para: ${prompt}` };
+      job.output = { status: 'pending_provider_integration', notes: `Guia sonoro para: ${prompt}`, provider: null };
     } else {
       return sendJson(res, 400, { error: 'Tipo de geração inválido' });
     }

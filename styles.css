@@ -33,14 +33,15 @@ body {
 .brand-wrap { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: inherit; }
 .brand-wrap img { width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--border); }
 .brand { font-weight: 700; letter-spacing: 0.3px; }
-.menu-links { display: grid; gap: 0.5rem; margin-left: auto; width: min(920px, 100%); }
+.menu-links { display: grid; gap: 0.45rem; margin-left: auto; width: min(920px, 100%); align-content: start; }
 .menu-links a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.93rem; padding: 0.32rem 0.55rem; border-radius: 999px; border: 1px solid transparent; }
 .menu-links a.active { color: var(--text); background: color-mix(in srgb, var(--accent) 22%, transparent); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
 
 .menu-layout { align-content: start; }
-.menu-row { display: flex; gap: 0.45rem; flex-wrap: wrap; justify-content: flex-end; }
-.menu-primary { padding-bottom: 0.1rem; border-bottom: 1px dashed color-mix(in srgb, var(--border) 55%, transparent); }
-.menu-secondary { padding-top: 0.15rem; }
+.menu-row { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: flex-end; }
+.menu-primary { align-items: center; padding-bottom: 0.15rem; border-bottom: 1px dashed color-mix(in srgb, var(--border) 55%, transparent); }
+.menu-secondary { padding-top: 0.15rem; display: none; }
+.menu-secondary.open { display: flex; }
 
 
 .hero { padding: 0.5rem 0 2rem; }
@@ -69,6 +70,7 @@ p { color: var(--muted); }
 .theme-toggle,
 .menu-toggle { white-space: nowrap; }
 .menu-toggle { display: none; }
+.menu-more-toggle { padding: 0.25rem 0.65rem; font-size: 0.85rem; }
 
 .section { padding: 3.2rem 0; }
 .section.alt { background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg) 75%, transparent)); }
@@ -267,7 +269,8 @@ p { color: var(--muted); }
   .menu-links.open { display: grid; }
   .menu-row { justify-content: flex-start; }
   .menu-primary { border-bottom: 0; padding-bottom: 0; }
-  .menu-secondary { padding-top: 0; }
+  .menu-secondary { padding-top: 0; display: flex; }
+  .menu-more-toggle { display: none; }
   .menu-links a { display: inline-flex; }
   .slide-frame-wrap iframe { min-height: 420px; }
 }
