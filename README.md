@@ -63,14 +63,11 @@ Acesse `http://localhost:4173`.
 - Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.
 
 
-## Fase 2 — Preparação de autenticação e melhoria de front-end
+## Fase 3 — Notificações reais e refinamento visual
 
 - `server.js` fornece API HTTP + servidor estático com persistência em `data/db.json`.
-- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`.
-- `api-client.js` disponibiliza helper básico para chamadas GET/POST.
-
-
-- `server.js` agora expõe `/api/auth/employee-whitelist` para centralizar autorização de perfil Funcionário.
-- `auth.js` passa a consumir whitelist do backend com fallback local, preparando transição para produção.
-- `script.js` e `styles.css` incluem melhorias visuais globais (tema claro/escuro, menu responsivo e toasts).
-- `index.html` + `site.js` adicionam cards com dados do `/api/dashboard` para visão rápida operacional na home.
+- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`, `/api/auth/employee-whitelist`, `/api/notifications`.
+- `auth.js` consome whitelist de funcionário pelo backend, com fallback local.
+- `floryn.js` publica e consulta notificações reais no backend por audiência (`public` e `logged`).
+- `painel.js` exibe contagem e feed das últimas notificações operacionais.
+- `styles.css` recebeu refinos de design (topbar sticky com blur, cards em glass, microinterações e melhor leitura mobile).

@@ -13,15 +13,14 @@ const defaultDb = {
   newsSuggestions: [],
   roleRequests: [],
   analyticsEvents: [],
+  notifications: [],
   auth: {
     employeeWhitelist: ['kuronumadeal@gmail.com'],
   },
 };
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(DATA_FILE)) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(defaultDb, null, 2));
-}
+if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify(defaultDb, null, 2));
 
 function readDb() {
   const parsed = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -29,6 +28,7 @@ function readDb() {
   if (!Array.isArray(parsed.newsSuggestions)) parsed.newsSuggestions = [];
   if (!Array.isArray(parsed.roleRequests)) parsed.roleRequests = [];
   if (!Array.isArray(parsed.analyticsEvents)) parsed.analyticsEvents = [];
+  if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
   if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
     parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
   }
@@ -88,12 +88,39 @@ const server = http.createServer(async (req, res) => {
   const { pathname } = url;
 
   if (pathname === '/api/health' && req.method === 'GET') {
-    return sendJson(res, 200, { ok: true, phase: 2, message: 'Backend local ativo + autenticação preparada' });
+    return sendJson(res, 200, { ok: true, phase: 3, message: 'Fase 3 ativa: backend + autenticação + notificações reais' });
   }
 
   if (pathname === '/api/auth/employee-whitelist' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, { emails: db.auth.employeeWhitelist });
+  }
+
+  if (pathname === '/api/notifications' && req.method === 'GET') {
+    const audience = (url.searchParams.get('audience') || '').trim().toLowerCase();
+    const db = readDb();
+    const filtered = audience
+      ? db.notifications.filter((n) => n.audience === 'all' || n.audience === audience)
+      : db.notifications;
+    return sendJson(res, 200, filtered.slice(-50).reverse());
+  }
+
+  if (pathname === '/api/notifications' && req.method === 'POST') {
+    const payload = await parseBody(req).catch(() => null);
+    if (!payload || !payload.title || !payload.message) {
+      return sendJson(res, 400, { error: 'Dados inválidos' });
+    }
+    const db = readDb();
+    db.notifications.push({
+      title: String(payload.title).trim(),
+      message: String(payload.message).trim(),
+      audience: String(payload.audience || 'all').toLowerCase(),
+      source: String(payload.source || 'portal').trim(),
+      at: new Date().toISOString(),
+    });
+    db.notifications = db.notifications.slice(-500);
+    writeDb(db);
+    return sendJson(res, 201, { ok: true });
   }
 
   if (pathname === '/api/contact' && req.method === 'POST') {
@@ -140,15 +167,17 @@ const server = http.createServer(async (req, res) => {
   if (pathname === '/api/dashboard' && req.method === 'GET') {
     const db = readDb();
     return sendJson(res, 200, {
-      phase: 2,
+      phase: 3,
       counts: {
         contacts: db.contacts.length,
         newsSuggestions: db.newsSuggestions.length,
         roleRequests: db.roleRequests.length,
         analyticsEvents: db.analyticsEvents.length,
+        notifications: db.notifications.length,
       },
       latestRoleRequests: db.roleRequests.slice(-8).reverse(),
       latestNews: db.newsSuggestions.slice(-8).reverse(),
+      latestNotifications: db.notifications.slice(-8).reverse(),
     });
   }
 

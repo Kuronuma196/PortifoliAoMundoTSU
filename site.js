@@ -36,6 +36,7 @@
       newsSuggestions: document.getElementById('home-count-news'),
       roleRequests: document.getElementById('home-count-roles'),
       analyticsEvents: document.getElementById('home-count-events'),
+      notifications: document.getElementById('home-count-notifications'),
     };
 
     try {

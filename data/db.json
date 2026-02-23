@@ -32,11 +32,62 @@
       "type": "page_view",
       "page": "index.html",
       "detail": "Tear's Studios Universe | Site Oficial"
+    },
+    {
+      "at": "2026-02-22T23:31:30.359Z",
+      "type": "page_view",
+      "page": "index.html",
+      "detail": "Tear's Studios Universe | Site Oficial"
+    },
+    {
+      "at": "2026-02-22T23:31:35.815Z",
+      "type": "page_view",
+      "page": "floryn.html",
+      "detail": "Floryn IA | Atendimento Virtual TSU"
+    },
+    {
+      "at": "2026-02-22T23:31:37.449Z",
+      "type": "page_view",
+      "page": "noticias.html",
+      "detail": "Notícias | TSU"
+    },
+    {
+      "at": "2026-02-22T23:35:38.060Z",
+      "type": "page_view",
+      "page": "index.html",
+      "detail": "Tear's Studios Universe | Site Oficial"
+    },
+    {
+      "at": "2026-02-22T23:35:44.239Z",
+      "type": "page_view",
+      "page": "floryn.html",
+      "detail": "Floryn IA | Atendimento Virtual TSU"
+    },
+    {
+      "at": "2026-02-22T23:35:45.768Z",
+      "type": "page_view",
+      "page": "noticias.html",
+      "detail": "Notícias | TSU"
+    },
+    {
+      "at": "2026-02-22T23:35:47.515Z",
+      "type": "page_view",
+      "page": "painel.html",
+      "detail": "Painel Operacional | TSU"
     }
   ],
   "auth": {
     "employeeWhitelist": [
       "kuronumadeal@gmail.com"
     ]
-  }
+  },
+  "notifications": [
+    {
+      "title": "Deploy local",
+      "message": "Nova atualização da fase 3",
+      "audience": "public",
+      "source": "qa",
+      "at": "2026-02-22T23:35:29.504Z"
+    }
+  ]
 }

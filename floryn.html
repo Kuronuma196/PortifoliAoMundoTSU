@@ -21,16 +21,22 @@
     </header>
 
     <main class="section container">
-      <section class="panel">
+      <section class="panel section-glow">
         <h2>Status do usuário</h2>
         <p id="floryn-user-status" class="small-note">Verificando perfil...</p>
         <div class="hero-actions">
           <button id="enable-notifications" class="button" data-track="enable_notifications">Ativar notificações</button>
-          <button id="send-update-notification" class="button ghost" data-track="send_update_notification">Simular notificação de atualização</button>
+          <button id="send-update-notification" class="button ghost" data-track="send_update_notification">Publicar atualização</button>
         </div>
       </section>
 
-      <section class="section-gap panel">
+      <section class="section-gap panel section-glow">
+        <h2>Central de notificações (Fase 3)</h2>
+        <p class="small-note">Notificações persistidas no backend e filtradas por audiência (público ou logado).</p>
+        <div id="notifications-feed" class="grid two"></div>
+      </section>
+
+      <section class="section-gap panel section-glow">
         <h2>Chat Floryn</h2>
         <div id="chat-log" class="chat-log"></div>
         <form id="floryn-form" class="stack-form">
