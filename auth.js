@@ -88,6 +88,19 @@ function updateRoleMessage(role, userEmail) {
   if (requestIntro) requestIntro.textContent = roleIntro(role);
 }
 
+async function postRoleRequest(payload) {
+  try {
+    const r = await fetch('/api/role-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return r.ok;
+  } catch (_) {
+    return false;
+  }
+}
+
 function saveRoleRequest(auth) {
   if (!requestForm || !roleSelect) return;
 
@@ -104,18 +117,23 @@ function saveRoleRequest(auth) {
       return;
     }
 
-    const records = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
-    records.push({
-      at: new Date().toISOString(),
+    const payload = {
       role,
       title,
       description,
       email,
       user: auth.currentUser?.displayName || email || 'anônimo',
+    };
+
+    postRoleRequest(payload).then((ok) => {
+      if (!ok) {
+        const records = JSON.parse(localStorage.getItem(REQUESTS_KEY) || '[]');
+        records.push({ ...payload, at: new Date().toISOString() });
+        localStorage.setItem(REQUESTS_KEY, JSON.stringify(records.slice(-200)));
+      }
+      requestForm.reset();
+      if (requestFeedback) requestFeedback.textContent = 'Solicitação registrada com sucesso.';
     });
-    localStorage.setItem(REQUESTS_KEY, JSON.stringify(records.slice(-200)));
-    requestForm.reset();
-    if (requestFeedback) requestFeedback.textContent = 'Solicitação registrada com sucesso.';
   });
 }
 

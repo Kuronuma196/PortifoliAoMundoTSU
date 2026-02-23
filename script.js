@@ -3,6 +3,22 @@ if (yearElement) yearElement.textContent = String(new Date().getFullYear());
 
 const STORAGE_KEY = 'tsu_analytics_events';
 
+async function persistEvent(event) {
+  const current = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  current.push(event);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(current.slice(-500)));
+
+  try {
+    await fetch('/api/analytics/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(event),
+    });
+  } catch (_) {
+    // backend opcional
+  }
+}
+
 function pushEvent(type, detail = '') {
   const event = {
     at: new Date().toISOString(),
@@ -10,9 +26,7 @@ function pushEvent(type, detail = '') {
     page: location.pathname.split('/').pop() || 'index.html',
     detail,
   };
-  const current = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  current.push(event);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(current.slice(-500)));
+  persistEvent(event);
 }
 
 pushEvent('page_view', document.title);
@@ -20,8 +34,7 @@ pushEvent('page_view', document.title);
 document.addEventListener('click', (ev) => {
   const target = ev.target.closest('[data-track]');
   if (!target) return;
-  const name = target.getAttribute('data-track') || 'click';
-  pushEvent('click', name);
+  pushEvent('click', target.getAttribute('data-track') || 'click');
 });
 
 document.querySelectorAll('.share-btn').forEach((btn) => {
@@ -32,9 +45,7 @@ document.querySelectorAll('.share-btn').forEach((btn) => {
       try {
         await navigator.share({ title, url });
         pushEvent('share', title);
-      } catch (_) {
-        // ignored
-      }
+      } catch (_) {}
       return;
     }
     try {

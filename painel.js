@@ -10,34 +10,55 @@
   const refreshBtn = document.getElementById('panel-refresh');
   const exportBtn = document.getElementById('panel-export');
 
-  function read(key) {
-    return JSON.parse(localStorage.getItem(key) || '[]');
+  function localData() {
+    return {
+      requests: JSON.parse(localStorage.getItem(requestsKey) || '[]'),
+      contacts: JSON.parse(localStorage.getItem(contactsKey) || '[]'),
+      newsSuggestions: JSON.parse(localStorage.getItem(newsKey) || '[]'),
+    };
   }
 
-  function render() {
-    const requests = read(requestsKey);
-    const contacts = read(contactsKey);
-    const news = read(newsKey);
+  async function readDashboard() {
+    try {
+      const r = await fetch('/api/dashboard');
+      if (r.ok) {
+        const d = await r.json();
+        return {
+          requests: d.latestRoleRequests || [],
+          contacts: Array(d.counts?.contacts || 0).fill({}),
+          newsSuggestions: d.latestNews || [],
+          counts: d.counts || {},
+        };
+      }
+    } catch (_) {}
+    const local = localData();
+    return {
+      ...local,
+      counts: {
+        contacts: local.contacts.length,
+        newsSuggestions: local.newsSuggestions.length,
+        roleRequests: local.requests.length,
+      },
+    };
+  }
 
-    if (requestsCount) requestsCount.textContent = String(requests.length);
-    if (contactsCount) contactsCount.textContent = String(contacts.length);
-    if (newsCount) newsCount.textContent = String(news.length);
+  async function render() {
+    const data = await readDashboard();
+
+    if (requestsCount) requestsCount.textContent = String(data.counts.roleRequests ?? data.requests.length);
+    if (contactsCount) contactsCount.textContent = String(data.counts.contacts ?? data.contacts.length);
+    if (newsCount) newsCount.textContent = String(data.counts.newsSuggestions ?? data.newsSuggestions.length);
 
     if (requestsList) {
-      requestsList.innerHTML = requests
-        .slice(-8)
-        .reverse()
-        .map((r) => `<article class="panel"><p class="meta">${r.role || 'perfil'} • ${new Date(r.at).toLocaleString()}</p><h3>${r.title || 'Sem título'}</h3><p>${r.description || ''}</p><p class="small-note">${r.user || ''} ${r.email ? `(${r.email})` : ''}</p></article>`)
+      requestsList.innerHTML = (data.requests || [])
+        .slice(0, 8)
+        .map((r) => `<article class="panel"><p class="meta">${r.role || 'perfil'} • ${r.at ? new Date(r.at).toLocaleString() : ''}</p><h3>${r.title || 'Sem título'}</h3><p>${r.description || ''}</p><p class="small-note">${r.user || ''} ${r.email ? `(${r.email})` : ''}</p></article>`)
         .join('');
     }
   }
 
   function exportAll() {
-    const data = {
-      requests: read(requestsKey),
-      contacts: read(contactsKey),
-      newsSuggestions: read(newsKey),
-    };
+    const data = localData();
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

@@ -27,8 +27,10 @@ Site oficial do projeto geral **Tear's Studios Universe** (estrutura multipágin
 ## Execução local
 
 ```bash
-python3 -m http.server 4173
+node server.js
 ```
+
+(Alternativa estática para visual: `python3 -m http.server 4173`).
 
 Acesse `http://localhost:4173`.
 
@@ -59,3 +61,10 @@ Acesse `http://localhost:4173`.
 
 - `nav-dynamic.js` adiciona launcher global de páginas com busca e atalho `Ctrl/Cmd + K`.
 - Botão flutuante “Explorar páginas” disponível em todas as páginas para acesso rápido.
+
+
+## Fase 1 — Backend real (API + banco local)
+
+- `server.js` fornece API HTTP + servidor estático com persistência em `data/db.json`.
+- Endpoints ativos: `/api/health`, `/api/contact`, `/api/news-suggestions`, `/api/role-requests`, `/api/analytics/events`, `/api/dashboard`.
+- `api-client.js` disponibiliza helper básico para chamadas GET/POST.

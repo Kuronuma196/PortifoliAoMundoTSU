@@ -8,12 +8,16 @@
   const clearBtn = document.getElementById('clear-analytics');
   const exportBtn = document.getElementById('export-analytics');
 
-  function readEvents() {
+  async function readEvents() {
+    try {
+      const r = await fetch('/api/analytics/events');
+      if (r.ok) return await r.json();
+    } catch (_) {}
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   }
 
-  function render() {
-    const events = readEvents();
+  async function render() {
+    const events = await readEvents();
     const pageViews = events.filter((e) => e.type === 'page_view').length;
     const clicks = events.filter((e) => e.type === 'click').length;
     const uniquePages = new Set(events.map((e) => e.page)).size;
@@ -30,8 +34,8 @@
     }
   }
 
-  function exportJson() {
-    const data = JSON.stringify(readEvents(), null, 2);
+  async function exportJson() {
+    const data = JSON.stringify(await readEvents(), null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
