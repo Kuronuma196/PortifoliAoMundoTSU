@@ -292,6 +292,45 @@ async function getSpaceMedia() {
 }
 
 
+function architectureStatus() {
+  return {
+    phase: 20,
+    architecture: {
+      frontend: {
+        current: 'Multi-page static + progressive JS',
+        target: 'Next.js (App Router) com design system reutilizável',
+        readiness: 62,
+      },
+      backend: {
+        current: 'Node.js HTTP monolítico local',
+        target: 'API modular (Fastify/Express) orientada a domínios',
+        readiness: 58,
+      },
+      data: {
+        current: 'JSON local (data/db.json)',
+        target: 'PostgreSQL + Redis + storage de mídia',
+        readiness: 46,
+      },
+      auth: {
+        current: 'Fluxo local + Google/Firebase parcial',
+        target: 'JWT + OAuth (Google/Facebook/LinkedIn)',
+        readiness: 52,
+      },
+      integrations: {
+        aiMedia: ['Renderforest', 'HeyGen', 'Canva IA'],
+        payments: ['Stripe', 'PayPal'],
+        social: ['Instagram', 'YouTube', 'LinkedIn'],
+      },
+      milestones: [
+        'Definir estrutura de monorepo e contratos de API (OpenAPI).',
+        'Separar módulos: auth, cms, media, payments, marketplace.',
+        'Criar adapters para provedores externos com fallback e observabilidade.',
+      ],
+      generatedAt: new Date().toISOString(),
+    },
+  };
+}
+
 function trustShowcaseSummary() {
   const db = readDb();
   const donations = db.donations || [];
@@ -763,6 +802,11 @@ const server = http.createServer(async (req, res) => {
 
 
 
+
+
+  if (pathname === '/api/architecture/status' && req.method === 'GET') {
+    return sendJson(res, 200, architectureStatus());
+  }
 
   if (pathname === '/api/trust/showcase' && req.method === 'GET') {
     return sendJson(res, 200, trustShowcaseSummary());

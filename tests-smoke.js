@@ -108,6 +108,10 @@ async function run() {
 
     const planningPage = await fetch(`${BASE_URL}/planejamento.html`);
     assert(planningPage.status === 200, 'planning_page_not_200');
+
+    const architecture = await getJson('/api/architecture/status');
+    assert(architecture.res.status === 200, 'architecture_status_not_200');
+    assert(typeof architecture.json?.architecture?.frontend?.readiness === 'number', 'architecture_frontend_readiness_invalid');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

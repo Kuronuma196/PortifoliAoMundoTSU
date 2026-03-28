@@ -108,6 +108,7 @@ Acesse `http://localhost:4173`.
 - **Fase 17 — Conversão e sustentabilidade**: trilha de apoio/doação, resumo de arrecadação e UX orientada a confiança e transparência.
 - **Fase 18 — Prova social e confiança institucional**: painel de credibilidade com indicadores de comunidade, segurança e entregas.
 - **Fase 19 — Blueprint Full-Stack de nova geração**: arquitetura alvo com Next.js + API modular + dados transacionais para evolução do portal em escala.
+- **Fase 20 — Fundação arquitetural executável**: status técnico em tempo real para orientar migração de front/back/data/auth por marcos.
 
 ### Execução iniciada: Fase 8
 
@@ -190,3 +191,11 @@ Acesse `http://localhost:4173`.
 - `script.js` inclui a rota de planejamento no menu global, garantindo acesso consistente em todas as páginas.
 - **Lembrete:** a Fase 15 foi a **FASE FINAL do ciclo anterior**; as fases 16+ representam o novo ciclo contínuo de evolução.
 - Investigação web de referências foi tentada, mas este ambiente segue com bloqueios de proxy para parte dos domínios externos; o plano foi estruturado com padrões amplamente adotados nesses segmentos.
+
+
+### Execução iniciada: Fase 20
+
+- `server.js` expõe `/api/architecture/status` com estado atual/alvo e percentual de prontidão por domínio (front-end, back-end, dados e auth).
+- `planejamento.html` + `planejamento.js` exibem painel dinâmico da arquitetura com marcos técnicos para o próximo ciclo.
+- `tests-smoke.js` valida o endpoint de arquitetura para assegurar consistência na execução do plano full-stack.
+- **Lembrete:** a Fase 15 foi a **FASE FINAL do ciclo anterior**; estamos no ciclo contínuo 16+.
