@@ -107,6 +107,7 @@ Acesse `http://localhost:4173`.
 - **Fase 16 — Evolução orientada por benchmark**: melhoria contínua com matriz inspirada em padrões de social/news, IA, institucional, business/doações e portfólio.
 - **Fase 17 — Conversão e sustentabilidade**: trilha de apoio/doação, resumo de arrecadação e UX orientada a confiança e transparência.
 - **Fase 18 — Prova social e confiança institucional**: painel de credibilidade com indicadores de comunidade, segurança e entregas.
+- **Fase 19 — Blueprint Full-Stack de nova geração**: arquitetura alvo com Next.js + API modular + dados transacionais para evolução do portal em escala.
 
 ### Execução iniciada: Fase 8
 
@@ -181,3 +182,11 @@ Acesse `http://localhost:4173`.
 - `index.html` + `site.js` exibem seção de prova social/institucional inspirada em padrões de social/news, institucional, business/doações e portfólio.
 - `tests-smoke.js` valida o endpoint de trust showcase para manter robustez do ciclo.
 - **Lembrete importante:** a Fase 15 foi marcada como **FASE FINAL do ciclo anterior**; as fases 16+ representam evolução contínua pós-ciclo.
+
+
+### Execução iniciada: Fase 19
+
+- Nova página `planejamento.html` consolida o plano técnico completo solicitado (arquitetura, dados, fases, fluxos e direções de deployment/segurança).
+- `script.js` inclui a rota de planejamento no menu global, garantindo acesso consistente em todas as páginas.
+- **Lembrete:** a Fase 15 foi a **FASE FINAL do ciclo anterior**; as fases 16+ representam o novo ciclo contínuo de evolução.
+- Investigação web de referências foi tentada, mas este ambiente segue com bloqueios de proxy para parte dos domínios externos; o plano foi estruturado com padrões amplamente adotados nesses segmentos.

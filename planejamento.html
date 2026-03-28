@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planejamento Full-Stack | TSU</title>
+    <meta name="description" content="Blueprint técnico Full-Stack do portal oficial TSU com fases, arquitetura e integrações." />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a><a class="active" href="planejamento.html">Planejamento</a><a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Planejamento</p>
+      <h1>Blueprint Full-Stack (execução em fases)</h1>
+      <p>Plano técnico detalhado inspirado em padrões de social/news, IA generativa, institucional, business/doações e marketplace de freelancers.</p>
+    </header>
+
+    <main class="section container">
+      <section class="panel section-glow">
+        <h2>Fase 19 — Arquitetura alvo e migração progressiva</h2>
+        <ul class="list">
+          <li><strong>Front-end alvo:</strong> Next.js (React), App Router, design system e componentes reutilizáveis.</li>
+          <li><strong>Back-end alvo:</strong> Node.js com Fastify (ou Express), APIs REST + OpenAPI.</li>
+          <li><strong>Banco de dados alvo:</strong> PostgreSQL (principal) + Redis (cache/filas).</li>
+          <li><strong>Auth:</strong> JWT + OAuth (Google/Facebook/LinkedIn).</li>
+          <li><strong>Pagamentos:</strong> Stripe + PayPal para doações e serviços premium.</li>
+        </ul>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Arquitetura de referência (diagrama lógico)</h2>
+<pre class="code-block">[Client Next.js]
+  |- Landing / Blog / Notícias / Marketplace / Dashboard
+  |- SSR + SEO + A11Y + i18n
+  v
+[API Gateway]
+  v
+[Node.js API - Fastify]
+  |- Auth (JWT/OAuth)
+  |- Media (upload + geração IA)
+  |- Payments (Stripe/PayPal)
+  |- Marketplace (freelancers, serviços, propostas)
+  |- CMS (posts, notícias, páginas)
+  v
+[PostgreSQL] [Redis] [Object Storage]
+  |- users, roles, posts, media, transactions, donations, gigs, proposals, messages
+  |- cache de busca, sessões e rate-limit
+  |- storage de assets gerados/enviados
+</pre>
+      </section>
+
+      <section class="section-gap">
+        <h2>Modelo de dados inicial (ER simplificado)</h2>
+        <div class="grid two">
+          <article class="panel"><h3>Users</h3><p>id, name, email, passwordHash, role, oauthProvider, createdAt</p></article>
+          <article class="panel"><h3>Posts</h3><p>id, authorId, title, slug, category, body, status, publishedAt</p></article>
+          <article class="panel"><h3>Media</h3><p>id, ownerId, type(image/video/audio/text), source(ai/upload), url, meta, createdAt</p></article>
+          <article class="panel"><h3>Transactions</h3><p>id, userId, kind(donation/service), provider, amount, currency, status, createdAt</p></article>
+          <article class="panel"><h3>Freelancers</h3><p>id, userId, skills, portfolioLinks, rating, availability</p></article>
+          <article class="panel"><h3>Messages</h3><p>id, fromUserId, toUserId, context(gig/proposal/support), body, createdAt</p></article>
+        </div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Fases de execução (roadmap técnico)</h2>
+        <div class="grid two">
+          <article class="panel"><h3>Fase 20 — Fundação Next.js + API modular</h3><p>Monorepo, pasta por domínio, autenticação base, OpenAPI, observabilidade.</p></article>
+          <article class="panel"><h3>Fase 21 — CMS + Notícias + SEO técnico</h3><p>Publicação editorial robusta com filtros, tags, sitemaps e schema.org.</p></article>
+          <article class="panel"><h3>Fase 22 — Criação IA multimídia</h3><p>Orquestração de provedores (texto/imagem/áudio/vídeo), fila e histórico por usuário.</p></article>
+          <article class="panel"><h3>Fase 23 — Marketplace freelancer</h3><p>Perfis, gigs, propostas, avaliações, mensageria e busca avançada.</p></article>
+          <article class="panel"><h3>Fase 24 — Monetização e doações</h3><p>Checkout seguro, webhook de pagamento, painel de transparência e relatórios.</p></article>
+          <article class="panel"><h3>Fase 25 — Hardening final do novo ciclo</h3><p>Segurança avançada, testes E2E, SLOs, backup/restore e go-live checklist.</p></article>
+        </div>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Fluxos obrigatórios de usuário</h2>
+        <ul class="list">
+          <li><strong>Anônimo:</strong> consome conteúdo, busca, visualiza serviços e notícias.</li>
+          <li><strong>Registrado:</strong> compra serviço, envia mídia, solicita geração IA.</li>
+          <li><strong>Freelancer:</strong> cria perfil/portfólio, publica serviços e responde propostas.</li>
+          <li><strong>Admin:</strong> gestão completa de usuários, conteúdo, pagamentos e auditoria.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>

@@ -105,6 +105,9 @@ async function run() {
     const trustShowcase = await getJson('/api/trust/showcase');
     assert(trustShowcase.res.status === 200, 'trust_showcase_not_200');
     assert(Array.isArray(trustShowcase.json?.trust?.highlights), 'trust_showcase_highlights_invalid');
+
+    const planningPage = await fetch(`${BASE_URL}/planejamento.html`);
+    assert(planningPage.status === 200, 'planning_page_not_200');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

@@ -20,6 +20,7 @@ const NAV_LINKS = {
     ['cms.html', 'CMS'],
     ['criacao.html', 'Criação'],
     ['floryn.html', 'Floryn IA'],
+    ['planejamento.html', 'Planejamento'],
   ],
   action: ['contato.html', 'Contato'],
 };
