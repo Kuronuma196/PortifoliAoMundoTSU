@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acesso e Login | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a>
+        <a href="personagens.html">Personagens</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="cronologia.html">Cronologia</a>
+        <a href="galeria.html">Galeria</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="analises.html">Análises</a>
+        <a class="active" href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a>
+        <a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Acesso</p>
+      <h1>Conta Google + Perfis de Usuário</h1>
+      <p>Faça login com Google, escolha seu perfil e envie sua solicitação.</p>
+    </header>
+
+    <main class="section container">
+      <section class="panel">
+        <h2>Autenticação</h2>
+        <p>O login usa Google (Firebase Authentication).</p>
+        <div class="hero-actions">
+          <button id="google-login" class="button" data-track="auth_login_click">Entrar com Google</button>
+          <button id="logout" class="button ghost" type="button" data-track="auth_logout_click">Sair</button>
+        </div>
+        <p id="auth-status" class="small-note">Nenhum usuário autenticado.</p>
+      </section>
+
+      <section class="section-gap">
+        <h2>Tipos de usuário</h2>
+        <div class="grid two">
+          <article class="panel role-card"><h3>Candidato</h3><p>Inscrição em seleções (no momento sem vagas abertas).</p></article>
+          <article class="panel role-card"><h3>Cliente</h3><p>Solicita prestação de serviços e briefing de novo projeto.</p></article>
+          <article class="panel role-card"><h3>Avaliador</h3><p>Comenta, critica e sugere melhorias estruturadas.</p></article>
+          <article class="panel role-card"><h3>Funcionário</h3><p>Perfil interno validado por whitelist de e-mail Google.</p></article>
+          <article class="panel role-card"><h3>Criador</h3><p>Submete proposta de personagem, história, nome, logo e identidade visual.</p></article>
+        </div>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Perfil e preferências</h2>
+        <label for="role-select">Tipo de usuário</label>
+        <select id="role-select" class="role-select" data-track="role_select_change">
+          <option value="">Selecione...</option>
+          <option value="candidato">Candidato</option>
+          <option value="cliente">Cliente</option>
+          <option value="avaliador">Avaliador</option>
+          <option value="funcionario">Funcionário</option>
+          <option value="criador">Criador</option>
+        </select>
+
+        <div class="prefs-grid">
+          <label><input id="pref-news" type="checkbox" /> Receber novidades e notícias por e-mail</label>
+          <label><input id="pref-selection" type="checkbox" /> Receber aviso de processos seletivos</label>
+        </div>
+        <button id="save-prefs" class="button" type="button" data-track="save_prefs_click">Salvar preferências</button>
+        <p id="role-feedback" class="small-note"></p>
+      </section>
+
+      <section class="section-gap panel">
+        <h2>Solicitação por perfil</h2>
+        <p id="request-intro" class="small-note">Selecione um perfil para habilitar este formulário.</p>
+        <form id="role-request-form" class="stack-form">
+          <input id="request-title" class="role-select" type="text" placeholder="Título da solicitação" required />
+          <textarea id="request-description" class="role-select" rows="5" placeholder="Descreva sua solicitação" required></textarea>
+          <button class="button" type="submit" data-track="role_request_submit">Enviar solicitação</button>
+        </form>
+        <p id="request-feedback" class="small-note"></p>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>
