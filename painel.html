@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Operacional | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a class="active" href="painel.html">Painel</a><a href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a><a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Painel</p>
+      <h1>Painel Operacional Local</h1>
+      <p>Visão consolidada de solicitações, mensagens de contato, sugestões de notícias e notificações.</p>
+    </header>
+
+    <main class="section container">
+      <div class="grid five">
+        <article class="panel"><h3>Solicitações por perfil</h3><p id="panel-requests-count" class="metric">0</p></article>
+        <article class="panel"><h3>Mensagens de contato</h3><p id="panel-contacts-count" class="metric">0</p></article>
+        <article class="panel"><h3>Sugestões de notícia</h3><p id="panel-news-count" class="metric">0</p></article>
+        <article class="panel"><h3>Notificações</h3><p id="panel-notifications-count" class="metric">0</p></article>
+        <article class="panel"><h3>Artigos CMS</h3><p id="panel-cms-count" class="metric">0</p></article>
+      </div>
+
+      <section class="section-gap panel section-glow">
+        <div class="hero-actions">
+          <button id="panel-refresh" class="button" data-track="panel_refresh">Atualizar</button>
+          <button id="panel-export" class="button ghost" data-track="panel_export">Exportar base local</button>
+        </div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Status de release (Fase 13)</h2>
+        <div id="panel-release-status" class="grid three"></div>
+      </section>
+
+
+      <section class="section-gap">
+        <h2>Últimas solicitações por perfil</h2>
+        <div id="panel-requests-list" class="grid two"></div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Últimas notificações</h2>
+        <div id="panel-notifications-list" class="grid two"></div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Últimos artigos CMS</h2>
+        <div id="panel-cms-list" class="grid two"></div>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="painel.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>

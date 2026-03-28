@@ -1,0 +1,51 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="spaceGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(580 340) rotate(90) scale(360 600)">
+      <stop stop-color="#152966"/>
+      <stop offset="1" stop-color="#0B122E"/>
+    </radialGradient>
+    <radialGradient id="sunCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(210 170) rotate(90) scale(92)">
+      <stop stop-color="#FFF6B0"/>
+      <stop offset="1" stop-color="#FFC85A"/>
+    </radialGradient>
+    <radialGradient id="earthCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(620 345) rotate(90) scale(185)">
+      <stop stop-color="#6FD4FF"/>
+      <stop offset="1" stop-color="#244A9E"/>
+    </radialGradient>
+    <radialGradient id="moonCore" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(955 525) rotate(90) scale(128)">
+      <stop stop-color="#E6E9F2"/>
+      <stop offset="1" stop-color="#8E97AF"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="700" rx="28" fill="url(#spaceGlow)"/>
+
+  <!-- Sol -->
+  <circle cx="210" cy="170" r="120" fill="#FFC85A" fill-opacity="0.20"/>
+  <circle cx="210" cy="170" r="92" fill="url(#sunCore)"/>
+
+  <!-- Terra -->
+  <circle cx="620" cy="345" r="185" fill="url(#earthCore)"/>
+  <path d="M523 304C548 278 586 283 603 303C617 319 637 323 653 312C677 295 710 307 718 333C727 362 713 389 689 398C661 408 637 398 625 383C605 360 578 359 557 374C531 393 500 382 492 354C485 332 497 317 523 304Z" fill="#4FBF7C" fill-opacity="0.78"/>
+  <path d="M577 434C600 422 631 428 651 442C667 453 690 455 709 446C730 436 755 441 765 461C777 485 765 512 741 523C709 538 673 530 650 510C627 489 592 487 569 504C541 525 502 519 486 492C472 467 482 437 507 425C528 415 554 421 577 434Z" fill="#70D89C" fill-opacity="0.72"/>
+
+  <!-- Lua -->
+  <circle cx="955" cy="525" r="128" fill="#B8C0D5" fill-opacity="0.16"/>
+  <circle cx="955" cy="525" r="118" fill="url(#moonCore)"/>
+  <circle cx="920" cy="490" r="18" fill="#A7AFC3" fill-opacity="0.8"/>
+  <circle cx="986" cy="548" r="14" fill="#A7AFC3" fill-opacity="0.75"/>
+  <circle cx="942" cy="570" r="10" fill="#9AA3BA" fill-opacity="0.72"/>
+
+  <!-- Estrelas -->
+  <g fill="#EAF0FF" fill-opacity="0.9">
+    <circle cx="170" cy="90" r="2"/><circle cx="350" cy="100" r="2"/><circle cx="420" cy="210" r="2"/>
+    <circle cx="560" cy="130" r="2"/><circle cx="700" cy="80" r="2"/><circle cx="860" cy="140" r="2"/>
+    <circle cx="960" cy="220" r="2"/><circle cx="1040" cy="330" r="2"/><circle cx="930" cy="430" r="2"/>
+    <circle cx="770" cy="500" r="2"/><circle cx="640" cy="560" r="2"/><circle cx="520" cy="500" r="2"/>
+    <circle cx="400" cy="590" r="2"/><circle cx="300" cy="500" r="2"/><circle cx="220" cy="410" r="2"/>
+  </g>
+
+  <rect x="120" y="470" width="440" height="90" rx="14" fill="#111C43" stroke="#2A3A78"/>
+  <text x="150" y="526" fill="#EAF0FF" font-family="Segoe UI, Arial" font-size="32" font-weight="700">Tear's Studios Universe</text>
+  <text x="150" y="405" fill="#9EDCFF" font-family="Segoe UI, Arial" font-size="20">Portal oficial em construção</text>
+</svg>

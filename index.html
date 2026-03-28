@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tear's Studios Universe | Site Oficial</title>
+    <meta name="description" content="Portal oficial do Tear's Studios Universe." />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html">
+        <img src="assets/images/logo-tsu.svg" alt="Logo TSU" />
+        <span class="brand">Tear's Studios Universe</span>
+      </a>
+      <div class="menu-links">
+        <a class="active" href="index.html">Início</a>
+        <a href="personagens.html">Personagens</a>
+        <a href="projetos.html">Projetos</a>
+        <a href="cronologia.html">Cronologia</a>
+        <a href="galeria.html">Galeria</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="noticias.html">Notícias</a>
+        <a href="analises.html">Análises</a>
+        <a href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a>
+        <a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="hero container">
+      <div class="hero-content">
+        <div>
+          <p class="kicker">Site oficial em evolução contínua</p>
+          <h1>Universo TSU: personagens, missões e projetos</h1>
+          <p>Nova etapa do site com navegação multipágina, galeria dedicada e organização de conteúdo por áreas.</p>
+          <div class="hero-actions">
+            <a class="button" href="personagens.html">Ver personagens</a>
+            <a class="button ghost" href="cronologia.html">Explorar cronologia</a>
+          </div>
+        </div>
+        <img class="hero-image" src="assets/images/hero-universe.svg" alt="Arte do universo TSU" />
+      </div>
+    </header>
+
+    <main>
+      <section class="section container">
+        <h2>Visão rápida da operação</h2>
+        <div class="grid seven">
+          <article class="panel stat-card"><p>Contatos</p><p class="metric" id="home-count-contacts">0</p></article>
+          <article class="panel stat-card"><p>Sugestões</p><p class="metric" id="home-count-news">0</p></article>
+          <article class="panel stat-card"><p>Solicitações</p><p class="metric" id="home-count-roles">0</p></article>
+          <article class="panel stat-card"><p>Eventos</p><p class="metric" id="home-count-events">0</p></article>
+          <article class="panel stat-card"><p>Notificações</p><p class="metric" id="home-count-notifications">0</p></article>
+          <article class="panel stat-card"><p>Artigos CMS</p><p class="metric" id="home-count-articles">0</p></article>
+          <article class="panel stat-card"><p>Gerações</p><p class="metric" id="home-count-creations">0</p></article>
+        </div>
+      </section>
+
+
+      <section class="section container">
+        <h2>Apoie o TSU (Business + Doações)</h2>
+        <p class="small-note">Fluxo inspirado em plataformas de apoio e páginas institucionais com foco em transparência e conversão.</p>
+        <div class="grid two">
+          <article class="panel">
+            <h3>Contribuição</h3>
+            <form id="support-form" class="stack-form">
+              <input id="support-donor" class="role-select" type="text" placeholder="Seu nome" required />
+              <input id="support-email" class="role-select" type="email" placeholder="Seu e-mail (opcional)" />
+              <input id="support-amount" class="role-select" type="number" min="1" step="1" placeholder="Valor em BRL" required />
+              <textarea id="support-message" class="role-select" rows="3" placeholder="Mensagem de apoio (opcional)"></textarea>
+              <button class="button" type="submit">Registrar apoio</button>
+            </form>
+            <p id="support-feedback" class="small-note"></p>
+          </article>
+          <article class="panel">
+            <h3>Resumo de apoio</h3>
+            <div id="support-summary-cards" class="grid three"></div>
+            <h4>Últimos apoiadores</h4>
+            <div id="support-latest-list" class="grid one"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section container">
+        <h2>Acesso rápido às páginas</h2>
+        <div class="grid three">
+          <a class="panel link-card" href="personagens.html"><h3>Personagens</h3><p>Aegis, Lyra e Nox com artes de exemplo.</p></a>
+          <a class="panel link-card" href="projetos.html"><h3>Projetos</h3><p>Roadmap e fases do projeto geral.</p></a>
+          <a class="panel link-card" href="cronologia.html"><h3>Cronologia</h3><p>Eventos, eras e marcos narrativos.</p></a>
+          <a class="panel link-card" href="galeria.html"><h3>Galeria</h3><p>Coleção de artes e materiais visuais.</p></a>
+          <a class="panel link-card" href="sobre.html"><h3>Missão e Visão</h3><p>Princípios e objetivos do TSU.</p></a>
+          <a class="panel link-card" href="noticias.html"><h3>Notícias</h3><p>Atualizações e comunicados oficiais do projeto.</p></a>
+          <a class="panel link-card" href="analises.html"><h3>Análises</h3><p>Métricas de navegação e interação do portal.</p></a>
+          <a class="panel link-card" href="acesso.html"><h3>Login e Perfis</h3><p>Acesso com Google e gestão do tipo de usuário.</p></a>
+          <a class="panel link-card" href="painel.html"><h3>Painel</h3><p>Resumo operacional de solicitações e mensagens.</p></a>
+          <a class="panel link-card" href="cms.html"><h3>CMS interno</h3><p>Gestão editorial de conteúdo e triagem da comunidade.</p></a>
+          <a class="panel link-card" href="contato.html"><h3>Contato</h3><p>Canal para envio de conteúdo oficial.</p></a>
+        </div>
+      </section>
+
+
+
+
+
+      <section class="section container">
+        <h2>Prova social e confiança institucional</h2>
+        <p class="small-note">Estrutura inspirada em referências de social/news, institucional, business/doações e portfólios para comunicação de valor.</p>
+        <div id="home-trust-showcase" class="grid four"></div>
+      </section>
+
+      <section class="section container">
+        <h2>Benchmark estratégico (nova rodada de evolução)</h2>
+        <p class="small-note">Baseado em padrões de plataformas de geração de mídia, social/news, institucional, business/doações e portfólio.</p>
+        <div id="home-benchmark-summary" class="grid three"></div>
+        <div id="home-benchmark-recommendations" class="grid one"></div>
+      </section>
+
+      <section class="section container">
+        <h2>Fase 15 — Fechamento do ciclo atual</h2>
+        <p class="small-note">Painel final de progresso do roadmap com checklist consolidada para encerramento deste ciclo.</p>
+        <div id="home-final-status" class="grid three"></div>
+      </section>
+
+      <section class="section container">
+        <h2>Fases do projeto (1 a 7)</h2>
+        <div class="grid two">
+          <article class="panel"><h3>1. Backend real (API + banco)</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>2. Autenticação Google produção</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>3. Notificações reais</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>4. CMS/admin interno</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>5. Criação multimídia produção</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>6. Observabilidade/analytics reais</h3><p>Status: <strong>Concluída</strong>.</p></article>
+          <article class="panel"><h3>7. Hardening final</h3><p>Status: <strong>Em implementação nesta fase</strong>.</p></article>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="container">
+          <h2>Slides oficiais (Canva)</h2>
+          <div class="slide-frame-wrap">
+            <iframe title="Slides oficiais TSU" src="https://www.canva.com/design/DAG9YPoJ8ik/OZ64JSXUtarVVBcpZ3CgKw/view?embed" loading="lazy" allowfullscreen></iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container"><p>© <span id="year"></span> Tear's Studios Universe • Fundação: Carlos Eduardo Kuronuma</p></div>
+    </footer>
+    <script src="script.js"></script>
+    <script src="site.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>

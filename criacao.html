@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criação Pública | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a href="cms.html">CMS</a><a class="active" href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a><a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Criação Pública</p>
+      <h1>Studio de Criação Multimídia (Fase 5)</h1>
+      <p>Experiência inspirada em estúdios web modernos: fluxo único para texto, imagem, vídeo e áudio mantendo a identidade TSU.</p>
+    </header>
+
+    <main class="section container">
+      <section class="panel section-glow">
+        <h2>Configuração de endpoints</h2>
+        <p class="small-note">Por padrão, o portal usa o endpoint local `/api/creation/generate`. Você pode sobrescrever cada tipo de geração.</p>
+        <div class="grid two">
+          <input id="api-image" class="role-select" placeholder="API de imagem" />
+          <input id="api-video" class="role-select" placeholder="API de vídeo" />
+          <input id="api-audio" class="role-select" placeholder="API de áudio" />
+          <input id="api-text" class="role-select" placeholder="API de texto" />
+        </div>
+        <div class="hero-actions"><button id="save-api-config" class="button" data-track="save_api_config">Salvar configuração</button></div>
+      </section>
+
+      <section class="section-gap panel section-glow creation-shell">
+        <div>
+          <h2>Gerador unificado</h2>
+          <form id="generation-form" class="stack-form">
+            <select id="generation-type" class="role-select">
+              <option value="text">Texto</option>
+              <option value="image">Imagem</option>
+              <option value="video">Vídeo</option>
+              <option value="audio">Áudio</option>
+            </select>
+            <textarea id="generation-prompt" class="role-select" rows="6" placeholder="Descreva o que deseja gerar" required></textarea>
+            <button class="button" type="submit" data-track="generate_content">Gerar conteúdo</button>
+          </form>
+          <p id="generation-feedback" class="small-note"></p>
+        </div>
+
+        <div>
+          <h2>Resultado estruturado</h2>
+          <pre id="generation-result" class="code-block">Sem resultados ainda.</pre>
+        </div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Histórico recente de gerações</h2>
+        <div id="generation-history" class="grid two"></div>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="criacao.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>
