@@ -105,6 +105,7 @@ Acesse `http://localhost:4173`.
 - **Fase 14 — Segurança aplicada**: endurecimento de acesso por perfil, trilha de auditoria e reforço de validações sensíveis.
 - **Fase 15 — Finalização de ciclo (FASE FINAL)**: estabilização final, revisão UX, checklist completo de publicação e fechamento do roadmap atual.
 - **Fase 16 — Evolução orientada por benchmark**: melhoria contínua com matriz inspirada em padrões de social/news, IA, institucional, business/doações e portfólio.
+- **Fase 17 — Conversão e sustentabilidade**: trilha de apoio/doação, resumo de arrecadação e UX orientada a confiança e transparência.
 
 ### Execução iniciada: Fase 8
 
@@ -163,3 +164,11 @@ Acesse `http://localhost:4173`.
 - `index.html` + `site.js` exibem benchmark estratégico e recomendações priorizadas na home.
 - `tests-smoke.js` valida o endpoint de benchmark para manter o ciclo de qualidade.
 - Investigação web foi tentada para ampliar referências, mas o ambiente possui bloqueio de proxy em alguns domínios externos; mantivemos base de padrões de mercado já consolidados em UX de portais.
+
+
+### Execução iniciada: Fase 17
+
+- `server.js` expõe `/api/support/donations` (POST/GET) e `/api/support/summary` para fluxo de apoio e transparência de arrecadação.
+- `index.html` + `site.js` adicionam formulário de apoio e painel de resumo com últimos apoiadores.
+- `tests-smoke.js` valida o ciclo de contribuição e leitura de resumo para garantir estabilidade.
+- Referências de mercado (social/news, institucional, business/doações e portfólio) seguem como base geral de arquitetura e UX; verificação web direta continua limitada por proxy em parte dos domínios neste ambiente.

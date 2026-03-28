@@ -90,6 +90,17 @@ async function run() {
     const benchmark = await getJson('/api/benchmark/summary');
     assert(benchmark.res.status === 200, 'benchmark_summary_not_200');
     assert(Array.isArray(benchmark.json?.benchmark?.categories), 'benchmark_categories_invalid');
+
+    const supportPost = await fetch(`${BASE_URL}/api/support/donations`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ donor: 'Smoke Donor', amount: 25, currency: 'BRL', message: 'Teste fase 17' }),
+    });
+    assert(supportPost.status === 201, 'support_post_failed');
+
+    const supportSummary = await getJson('/api/support/summary');
+    assert(supportSummary.res.status === 200, 'support_summary_not_200');
+    assert(typeof supportSummary.json?.totals?.donations === 'number', 'support_totals_invalid');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

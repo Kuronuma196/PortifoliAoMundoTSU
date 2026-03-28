@@ -36,6 +36,7 @@ const defaultDb = {
   notifications: [],
   cmsArticles: [],
   creationJobs: [],
+  donations: [],
   auditLogs: [],
   auth: {
     employeeWhitelist: ['kuronumadeal@gmail.com'],
@@ -54,6 +55,7 @@ function readDb() {
   if (!Array.isArray(parsed.notifications)) parsed.notifications = [];
   if (!Array.isArray(parsed.cmsArticles)) parsed.cmsArticles = [];
   if (!Array.isArray(parsed.creationJobs)) parsed.creationJobs = [];
+  if (!Array.isArray(parsed.donations)) parsed.donations = [];
   if (!Array.isArray(parsed.auditLogs)) parsed.auditLogs = [];
   if (!parsed.auth || !Array.isArray(parsed.auth.employeeWhitelist)) {
     parsed.auth = { employeeWhitelist: [...defaultDb.auth.employeeWhitelist] };
@@ -296,7 +298,7 @@ function benchmarkSummary() {
     socialNews: Math.min(100, 60 + Math.min((db.newsSuggestions.length || 0) * 4, 20)),
     creatorAi: Math.min(100, 58 + Math.min((db.creationJobs.length || 0) * 3, 22)),
     institutional: Math.min(100, 65 + Math.min((db.contacts.length || 0) * 2, 20)),
-    businessDonation: Math.min(100, 52 + Math.min((db.roleRequests.length || 0) * 3, 24)),
+    businessDonation: Math.min(100, 52 + Math.min((db.roleRequests.length || 0) * 2 + (db.donations.length || 0) * 4, 32)),
     portfolio: Math.min(100, 68 + Math.min((db.cmsArticles.length || 0) * 3, 18)),
   };
   const average = Math.round(Object.values(scores).reduce((acc, n) => acc + n, 0) / Object.keys(scores).length);
@@ -375,6 +377,7 @@ function finalPhaseStatus() {
         cmsArticles: db.cmsArticles.length,
         analyticsEvents: db.analyticsEvents.length,
         auditLogs: db.auditLogs.length,
+      donations: db.donations.length,
       },
       checklist: checks,
       readyToCloseCycle: progress === 100,
@@ -436,6 +439,7 @@ function runtimeStatus() {
       cmsArticles: db.cmsArticles.length,
       notifications: db.notifications.length,
       auditLogs: db.auditLogs.length,
+      donations: db.donations.length,
     },
   };
 }
@@ -592,6 +596,7 @@ const server = http.createServer(async (req, res) => {
         newsSuggestions: db.newsSuggestions.length,
         notifications: db.notifications.length,
       auditLogs: db.auditLogs.length,
+      donations: db.donations.length,
       },
       latestArticles: db.cmsArticles.slice(-6).reverse(),
       latestSuggestions: db.newsSuggestions.slice(-6).reverse(),
@@ -742,8 +747,10 @@ const server = http.createServer(async (req, res) => {
         analyticsEvents: db.analyticsEvents.length,
         notifications: db.notifications.length,
       auditLogs: db.auditLogs.length,
+      donations: db.donations.length,
         cmsArticles: db.cmsArticles.length,
         creationJobs: db.creationJobs.length,
+        donations: db.donations.length,
       },
       latestRoleRequests: db.roleRequests.slice(-8).reverse(),
       latestNews: db.newsSuggestions.slice(-8).reverse(),
@@ -791,6 +798,56 @@ const server = http.createServer(async (req, res) => {
         details: sanitizeText(error?.message || 'space_media_unavailable', 120),
       });
     }
+  }
+
+
+  if (pathname === '/api/support/donations' && req.method === 'POST') {
+    const payload = await parseBody(req).catch(() => null);
+    const donor = sanitizeText(payload?.donor, 120) || 'Apoiador';
+    const email = sanitizeText(payload?.email, 140);
+    const message = sanitizeText(payload?.message, 500);
+    const amount = Number(payload?.amount || 0);
+    const currency = sanitizeText(payload?.currency || 'BRL', 10).toUpperCase();
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000) {
+      return sendJson(res, 400, { error: 'Valor de apoio inválido.' });
+    }
+
+    const db = readDb();
+    const donation = {
+      id: `don_${Date.now()}`,
+      donor,
+      email,
+      message,
+      amount: Math.round(amount * 100) / 100,
+      currency,
+      at: new Date().toISOString(),
+    };
+    db.donations.push(donation);
+    db.donations = db.donations.slice(-2000);
+    writeDb(db);
+    return sendJson(res, 201, { ok: true, donationId: donation.id });
+  }
+
+  if (pathname === '/api/support/donations' && req.method === 'GET') {
+    const db = readDb();
+    return sendJson(res, 200, db.donations.slice(-50).reverse());
+  }
+
+  if (pathname === '/api/support/summary' && req.method === 'GET') {
+    const db = readDb();
+    const donations = db.donations || [];
+    const total = donations.reduce((acc, item) => acc + Number(item.amount || 0), 0);
+    const count = donations.length;
+    const avg = count ? total / count : 0;
+    return sendJson(res, 200, {
+      phase: 17,
+      totals: {
+        donations: count,
+        amountBRL: Math.round(total * 100) / 100,
+        avgTicketBRL: Math.round(avg * 100) / 100,
+      },
+      latest: donations.slice(-6).reverse(),
+    });
   }
 
   if (pathname === '/api/analytics/events' && req.method === 'GET') {

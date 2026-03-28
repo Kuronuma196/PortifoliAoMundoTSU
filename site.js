@@ -108,6 +108,72 @@
 
 
 
+
+
+  async function renderSupportSummary() {
+    const cards = document.getElementById('support-summary-cards');
+    const latest = document.getElementById('support-latest-list');
+    if (!cards || !latest) return;
+
+    try {
+      const response = await fetch('/api/support/summary');
+      if (!response.ok) throw new Error('support_summary_failed');
+      const data = await response.json();
+      const totals = data?.totals || {};
+
+      const items = [
+        { label: 'Total de apoios', value: String(totals.donations || 0) },
+        { label: 'Valor acumulado (BRL)', value: String(totals.amountBRL || 0) },
+        { label: 'Ticket médio (BRL)', value: String(totals.avgTicketBRL || 0) },
+      ];
+      cards.innerHTML = items
+        .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.label)}</p><p class="metric">${escapeHtml(item.value)}</p></article>`)
+        .join('');
+
+      const latestItems = Array.isArray(data?.latest) ? data.latest : [];
+      latest.innerHTML = latestItems.length
+        ? latestItems
+            .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.donor || 'Apoiador')} • ${item.at ? new Date(item.at).toLocaleString() : ''}</p><p><strong>BRL ${escapeHtml(String(item.amount || 0))}</strong></p><p>${escapeHtml(item.message || 'Sem mensagem.')}</p></article>`)
+            .join('')
+        : '<article class="panel"><p class="small-note">Nenhum apoio registrado ainda.</p></article>';
+    } catch (_) {
+      cards.innerHTML = '<article class="panel"><p class="small-note">Resumo de apoio indisponível.</p></article>';
+      latest.innerHTML = '';
+    }
+  }
+
+  async function setupSupportForm() {
+    const form = document.getElementById('support-form');
+    const feedback = document.getElementById('support-feedback');
+    if (!form) return;
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const payload = {
+        donor: document.getElementById('support-donor')?.value?.trim(),
+        email: document.getElementById('support-email')?.value?.trim(),
+        amount: Number(document.getElementById('support-amount')?.value || 0),
+        message: document.getElementById('support-message')?.value?.trim(),
+        currency: 'BRL',
+      };
+      if (!payload.donor || !payload.amount) return;
+
+      try {
+        const response = await fetch('/api/support/donations', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!response.ok) throw new Error('support_submit_failed');
+        if (feedback) feedback.textContent = 'Apoio registrado com sucesso. Obrigado!';
+        form.reset();
+        renderSupportSummary();
+      } catch (_) {
+        if (feedback) feedback.textContent = 'Não foi possível registrar o apoio agora.';
+      }
+    });
+  }
+
   async function renderBenchmarkSummary() {
     const summaryEl = document.getElementById('home-benchmark-summary');
     const recEl = document.getElementById('home-benchmark-recommendations');

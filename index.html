@@ -56,6 +56,31 @@
         </div>
       </section>
 
+
+      <section class="section container">
+        <h2>Apoie o TSU (Business + Doações)</h2>
+        <p class="small-note">Fluxo inspirado em plataformas de apoio e páginas institucionais com foco em transparência e conversão.</p>
+        <div class="grid two">
+          <article class="panel">
+            <h3>Contribuição</h3>
+            <form id="support-form" class="stack-form">
+              <input id="support-donor" class="role-select" type="text" placeholder="Seu nome" required />
+              <input id="support-email" class="role-select" type="email" placeholder="Seu e-mail (opcional)" />
+              <input id="support-amount" class="role-select" type="number" min="1" step="1" placeholder="Valor em BRL" required />
+              <textarea id="support-message" class="role-select" rows="3" placeholder="Mensagem de apoio (opcional)"></textarea>
+              <button class="button" type="submit">Registrar apoio</button>
+            </form>
+            <p id="support-feedback" class="small-note"></p>
+          </article>
+          <article class="panel">
+            <h3>Resumo de apoio</h3>
+            <div id="support-summary-cards" class="grid three"></div>
+            <h4>Últimos apoiadores</h4>
+            <div id="support-latest-list" class="grid one"></div>
+          </article>
+        </div>
+      </section>
+
       <section class="section container">
         <h2>Acesso rápido às páginas</h2>
         <div class="grid three">
