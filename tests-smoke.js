@@ -101,6 +101,10 @@ async function run() {
     const supportSummary = await getJson('/api/support/summary');
     assert(supportSummary.res.status === 200, 'support_summary_not_200');
     assert(typeof supportSummary.json?.totals?.donations === 'number', 'support_totals_invalid');
+
+    const trustShowcase = await getJson('/api/trust/showcase');
+    assert(trustShowcase.res.status === 200, 'trust_showcase_not_200');
+    assert(Array.isArray(trustShowcase.json?.trust?.highlights), 'trust_showcase_highlights_invalid');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

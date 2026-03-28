@@ -174,6 +174,28 @@
     });
   }
 
+
+
+  async function renderTrustShowcase() {
+    const box = document.getElementById('home-trust-showcase');
+    if (!box) return;
+
+    try {
+      const r = await fetch('/api/trust/showcase');
+      if (!r.ok) throw new Error('trust_showcase_failed');
+      const data = await r.json();
+      const highlights = Array.isArray(data?.trust?.highlights) ? data.trust.highlights : [];
+
+      box.innerHTML = highlights.length
+        ? highlights
+            .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.title || 'Indicador')}</p><p class="metric">${escapeHtml(item.value || '0')}</p><p>${escapeHtml(item.detail || '')}</p><p class="small-note">Base: ${escapeHtml(item.source || 'tsu')}</p></article>`)
+            .join('')
+        : '<article class="panel"><p class="small-note">Sem dados de prova social no momento.</p></article>';
+    } catch (_) {
+      box.innerHTML = '<article class="panel"><p class="small-note">Falha ao carregar prova social.</p></article>';
+    }
+  }
+
   async function renderBenchmarkSummary() {
     const summaryEl = document.getElementById('home-benchmark-summary');
     const recEl = document.getElementById('home-benchmark-recommendations');
@@ -337,4 +359,7 @@
   renderSpaceMedia();
   renderFinalStatus();
   renderBenchmarkSummary();
+  renderSupportSummary();
+  renderTrustShowcase();
+  setupSupportForm();
 })();

@@ -106,6 +106,7 @@ Acesse `http://localhost:4173`.
 - **Fase 15 — Finalização de ciclo (FASE FINAL)**: estabilização final, revisão UX, checklist completo de publicação e fechamento do roadmap atual.
 - **Fase 16 — Evolução orientada por benchmark**: melhoria contínua com matriz inspirada em padrões de social/news, IA, institucional, business/doações e portfólio.
 - **Fase 17 — Conversão e sustentabilidade**: trilha de apoio/doação, resumo de arrecadação e UX orientada a confiança e transparência.
+- **Fase 18 — Prova social e confiança institucional**: painel de credibilidade com indicadores de comunidade, segurança e entregas.
 
 ### Execução iniciada: Fase 8
 
@@ -172,3 +173,11 @@ Acesse `http://localhost:4173`.
 - `index.html` + `site.js` adicionam formulário de apoio e painel de resumo com últimos apoiadores.
 - `tests-smoke.js` valida o ciclo de contribuição e leitura de resumo para garantir estabilidade.
 - Referências de mercado (social/news, institucional, business/doações e portfólio) seguem como base geral de arquitetura e UX; verificação web direta continua limitada por proxy em parte dos domínios neste ambiente.
+
+
+### Execução iniciada: Fase 18
+
+- `server.js` expõe `/api/trust/showcase` com indicadores de comunidade, produção editorial, apoio e auditoria.
+- `index.html` + `site.js` exibem seção de prova social/institucional inspirada em padrões de social/news, institucional, business/doações e portfólio.
+- `tests-smoke.js` valida o endpoint de trust showcase para manter robustez do ciclo.
+- **Lembrete importante:** a Fase 15 foi marcada como **FASE FINAL do ciclo anterior**; as fases 16+ representam evolução contínua pós-ciclo.

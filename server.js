@@ -292,6 +292,57 @@ async function getSpaceMedia() {
 }
 
 
+function trustShowcaseSummary() {
+  const db = readDb();
+  const donations = db.donations || [];
+  const totalDonation = donations.reduce((acc, item) => acc + Number(item.amount || 0), 0);
+
+  const highlights = [
+    {
+      title: 'Comunidade ativa',
+      value: String((db.newsSuggestions || []).length),
+      detail: 'Sugestões enviadas pela comunidade',
+      source: 'social/news',
+    },
+    {
+      title: 'Produção editorial',
+      value: String((db.cmsArticles || []).length),
+      detail: 'Artigos publicados no CMS interno',
+      source: 'institutional/portfolio',
+    },
+    {
+      title: 'Apoio registrado',
+      value: `BRL ${Math.round(totalDonation * 100) / 100}`,
+      detail: 'Total acumulado em contribuições',
+      source: 'business/doações',
+    },
+    {
+      title: 'Confiabilidade operacional',
+      value: String((db.auditLogs || []).length),
+      detail: 'Eventos de auditoria para trilha de segurança',
+      source: 'institutional/security',
+    },
+  ];
+
+  return {
+    phase: 18,
+    trust: {
+      summary: 'Painel de prova social e institucional para comunicação de valor e confiança.',
+      highlights,
+      references: {
+        inspiration: [
+          'portais de notícias para hierarquia editorial',
+          'redes sociais para dinâmica de comunidade',
+          'sites institucionais para clareza de governança',
+          'portfólios para exposição de entregas',
+          'plataformas business/doações para transparência de conversão',
+        ],
+      },
+      generatedAt: new Date().toISOString(),
+    },
+  };
+}
+
 function benchmarkSummary() {
   const db = readDb();
   const scores = {
@@ -711,6 +762,11 @@ const server = http.createServer(async (req, res) => {
 
 
 
+
+
+  if (pathname === '/api/trust/showcase' && req.method === 'GET') {
+    return sendJson(res, 200, trustShowcaseSummary());
+  }
 
   if (pathname === '/api/benchmark/summary' && req.method === 'GET') {
     return sendJson(res, 200, benchmarkSummary());

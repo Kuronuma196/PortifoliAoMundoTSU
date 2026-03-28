@@ -295,3 +295,5 @@ p { color: var(--muted); }
 
 #home-benchmark-summary .panel { min-height: 180px; }
 #home-benchmark-recommendations .panel { border-style: dashed; }
+
+#home-trust-showcase .panel { min-height: 190px; }
