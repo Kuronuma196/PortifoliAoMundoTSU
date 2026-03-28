@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CMS Interno | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a class="active" href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a><a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / CMS Interno</p>
+      <h1>CMS/Admin Interno (Fase 4)</h1>
+      <p>Gestão rápida de conteúdos editoriais e visão de pendências da comunidade.</p>
+    </header>
+
+    <main class="section container">
+      <section class="panel section-glow">
+        <h2>Criar artigo interno</h2>
+        <form id="cms-article-form" class="stack-form">
+          <input id="cms-title" class="role-select" type="text" placeholder="Título do artigo" required />
+          <select id="cms-category" class="role-select" required>
+            <option value="">Categoria</option>
+            <option value="Comunicado">Comunicado</option>
+            <option value="Roadmap">Roadmap</option>
+            <option value="Bastidores">Bastidores</option>
+            <option value="Comunidade">Comunidade</option>
+          </select>
+          <select id="cms-status" class="role-select" required>
+            <option value="draft">Rascunho</option>
+            <option value="published">Publicado</option>
+          </select>
+          <textarea id="cms-content" class="role-select" rows="4" placeholder="Resumo do conteúdo" required></textarea>
+
+          <input id="cms-admin-key" class="role-select" type="password" placeholder="Chave administrativa" autocomplete="off" />
+          <button class="button" type="submit" data-track="cms_article_submit">Salvar artigo</button>
+        </form>
+        <p id="cms-feedback" class="small-note"></p>
+      </section>
+
+      <section class="section-gap">
+        <h2>Indicadores CMS</h2>
+        <div class="grid four">
+          <article class="panel"><p>Artigos</p><p id="cms-count-articles" class="metric">0</p></article>
+          <article class="panel"><p>Sugestões</p><p id="cms-count-suggestions" class="metric">0</p></article>
+          <article class="panel"><p>Notificações</p><p id="cms-count-notifications" class="metric">0</p></article>
+          <article class="panel"><p>Contatos</p><p id="cms-count-contacts" class="metric">0</p></article>
+        </div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Últimos artigos</h2>
+        <div id="cms-articles-list" class="grid two"></div>
+      </section>
+
+      <section class="section-gap">
+        <h2>Últimas sugestões da comunidade</h2>
+        <div id="cms-suggestions-list" class="grid two"></div>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="cms.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>

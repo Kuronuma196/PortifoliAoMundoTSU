@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projetos | TSU</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="topbar container">
+      <a class="brand-wrap" href="index.html"><img src="assets/images/logo-tsu.svg" alt="Logo TSU" /><span class="brand">Tear's Studios Universe</span></a>
+      <div class="menu-links">
+        <a href="index.html">Início</a><a href="personagens.html">Personagens</a><a class="active" href="projetos.html">Projetos</a><a href="cronologia.html">Cronologia</a><a href="galeria.html">Galeria</a><a href="sobre.html">Sobre</a><a href="noticias.html">Notícias</a><a href="analises.html">Análises</a><a href="acesso.html">Acesso</a><a href="painel.html">Painel</a><a href="cms.html">CMS</a><a href="criacao.html">Criação</a><a href="floryn.html">Floryn IA</a><a class="button ghost" href="contato.html">Contato</a>
+      </div>
+    </nav>
+
+    <header class="page-hero container">
+      <p class="breadcrumb">Início / Projetos</p>
+      <h1>Projetos do Tear's Studios Universe</h1>
+      <p>Filtre por categoria para navegar com mais rapidez entre as frentes do projeto.</p>
+      <label for="project-filter">Filtro de categoria</label>
+      <select id="project-filter" class="role-select" data-track="project_filter_change">
+        <option value="all">Todas as categorias</option>
+        <option value="audiovisual">Audiovisuais</option>
+        <option value="empregabilidade">Empregabilidade</option>
+        <option value="estudos">Estudos</option>
+        <option value="acoes">Ações</option>
+        <option value="jogos">Jogos</option>
+        <option value="sites">Sites e Aplicações</option>
+        <option value="externos">Externos de Participação</option>
+        <option value="outros">Outros</option>
+      </select>
+    </header>
+
+    <main class="section container">
+      <div class="grid two">
+        <article class="panel project-item" data-category="audiovisual"><h3>Projetos Audiovisuais</h3><ul class="list"><li>Curtas e trailers conceituais.</li><li>Séries e episódios narrativos.</li><li>Trilhas e motion graphics.</li></ul></article>
+        <article class="panel project-item" data-category="empregabilidade"><h3>Projetos de Empregabilidade</h3><ul class="list"><li>Capacitação prática criativa.</li><li>Parcerias para oportunidades.</li><li>Portfólio voltado ao mercado.</li></ul></article>
+        <article class="panel project-item" data-category="estudos"><h3>Projetos de Estudos</h3><ul class="list"><li>Pesquisa de lore e worldbuilding.</li><li>Laboratório de roteiro e arte.</li><li>Documentação de aprendizados.</li></ul></article>
+        <article class="panel project-item" data-category="acoes"><h3>Projetos de Ações</h3><ul class="list"><li>Ações com comunidade e parceiros.</li><li>Campanhas temáticas.</li><li>Iniciativas sociais.</li></ul></article>
+        <article class="panel project-item" data-category="jogos"><h3>Projetos de Jogos</h3><ul class="list"><li>Protótipos narrativos.</li><li>Design de mecânicas.</li><li>Experimentos de progressão.</li></ul></article>
+        <article class="panel project-item" data-category="sites"><h3>Projetos de Sites e Aplicações</h3><ul class="list"><li>Portal oficial TSU.</li><li>Ferramentas de produção.</li><li>Apps de comunidade.</li></ul></article>
+        <article class="panel project-item" data-category="externos"><h3>Projetos Externos de Participação</h3><ul class="list"><li>Eventos, editais e feiras.</li><li>Colaborações com parceiros.</li><li>Participações colaborativas.</li></ul></article>
+        <article class="panel project-item" data-category="outros"><h3>Outros Projetos</h3><ul class="list"><li>Pilotos experimentais.</li><li>Projetos especiais de branding.</li><li>Novas frentes futuras.</li></ul></article>
+      </div>
+    </main>
+
+    <footer class="footer"><div class="container"><p>© <span id="year"></span> Tear's Studios Universe</p></div></footer>
+    <script src="script.js"></script>
+    <script src="site.js"></script>
+    <script src="nav-dynamic.js"></script>
+  </body>
+</html>
