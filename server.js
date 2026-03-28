@@ -290,6 +290,68 @@ async function getSpaceMedia() {
 }
 
 
+function benchmarkSummary() {
+  const db = readDb();
+  const scores = {
+    socialNews: Math.min(100, 60 + Math.min((db.newsSuggestions.length || 0) * 4, 20)),
+    creatorAi: Math.min(100, 58 + Math.min((db.creationJobs.length || 0) * 3, 22)),
+    institutional: Math.min(100, 65 + Math.min((db.contacts.length || 0) * 2, 20)),
+    businessDonation: Math.min(100, 52 + Math.min((db.roleRequests.length || 0) * 3, 24)),
+    portfolio: Math.min(100, 68 + Math.min((db.cmsArticles.length || 0) * 3, 18)),
+  };
+  const average = Math.round(Object.values(scores).reduce((acc, n) => acc + n, 0) / Object.keys(scores).length);
+
+  return {
+    phase: 16,
+    benchmark: {
+      average,
+      categories: [
+        {
+          id: 'social_news',
+          title: 'Social + Notícias',
+          score: scores.socialNews,
+          focus: 'feed dinâmico, compartilhamento e confiança de fonte',
+          references: ['redes sociais', 'portais de notícias'],
+        },
+        {
+          id: 'creator_ai',
+          title: 'Criação IA',
+          score: scores.creatorAi,
+          focus: 'fluxo rápido de prompt, histórico e clareza de saída',
+          references: ['plataformas de geração de mídia'],
+        },
+        {
+          id: 'institutional',
+          title: 'Institucional',
+          score: scores.institutional,
+          focus: 'clareza de proposta, confiança e governança',
+          references: ['sites institucionais'],
+        },
+        {
+          id: 'business_donation',
+          title: 'Business + Doações',
+          score: scores.businessDonation,
+          focus: 'conversão, transparência e fluxo de contribuição',
+          references: ['sites business', 'plataformas de doação'],
+        },
+        {
+          id: 'portfolio',
+          title: 'Portfólio',
+          score: scores.portfolio,
+          focus: 'provas visuais, cases e storytelling de projeto',
+          references: ['portfólios digitais'],
+        },
+      ],
+      recommendations: [
+        'Padronizar cards com CTA principal + secundário em todas as páginas estratégicas.',
+        'Adicionar trilha de conversão para apoio/doação e intenção comercial com mensuração.',
+        'Expandir provas sociais (cases, métricas, depoimentos) no home e no CMS público.',
+      ],
+      generatedAt: new Date().toISOString(),
+    },
+  };
+}
+
 function finalPhaseStatus() {
   const db = readDb();
   const checks = [
@@ -643,6 +705,11 @@ const server = http.createServer(async (req, res) => {
 
 
 
+
+
+  if (pathname === '/api/benchmark/summary' && req.method === 'GET') {
+    return sendJson(res, 200, benchmarkSummary());
+  }
 
   if (pathname === '/api/final/status' && req.method === 'GET') {
     return sendJson(res, 200, finalPhaseStatus());

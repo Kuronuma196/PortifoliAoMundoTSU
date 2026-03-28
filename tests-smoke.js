@@ -86,6 +86,10 @@ async function run() {
     const finalStatus = await getJson('/api/final/status');
     assert(finalStatus.res.status === 200, 'final_status_not_200');
     assert(typeof finalStatus.json?.final?.progress === 'number', 'final_status_progress_invalid');
+
+    const benchmark = await getJson('/api/benchmark/summary');
+    assert(benchmark.res.status === 200, 'benchmark_summary_not_200');
+    assert(Array.isArray(benchmark.json?.benchmark?.categories), 'benchmark_categories_invalid');
     const payload = {
       title: `Teste API ${Date.now()}`,
       summary: 'Registro automatizado da Fase 10 para verificação de pipeline local.',

@@ -106,6 +106,39 @@
 
 
 
+
+
+  async function renderBenchmarkSummary() {
+    const summaryEl = document.getElementById('home-benchmark-summary');
+    const recEl = document.getElementById('home-benchmark-recommendations');
+    if (!summaryEl) return;
+
+    try {
+      const r = await fetch('/api/benchmark/summary');
+      if (!r.ok) throw new Error('benchmark_summary_failed');
+      const data = await r.json();
+      const categories = Array.isArray(data?.benchmark?.categories) ? data.benchmark.categories : [];
+
+      summaryEl.innerHTML = categories
+        .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.title || 'Categoria')}</p><p class="metric">${escapeHtml(String(item.score || 0))}</p><p>${escapeHtml(item.focus || '')}</p></article>`)
+        .join('');
+
+      if (!categories.length) {
+        summaryEl.innerHTML = '<article class="panel"><p class="small-note">Benchmark indisponível no momento.</p></article>';
+      }
+
+      if (recEl) {
+        const recs = Array.isArray(data?.benchmark?.recommendations) ? data.benchmark.recommendations : [];
+        recEl.innerHTML = recs.length
+          ? `<article class="panel"><h3>Recomendações prioritárias</h3><ul class="list">${recs.map((r) => `<li>${escapeHtml(r)}</li>`).join('')}</ul></article>`
+          : '<article class="panel"><p class="small-note">Sem recomendações no momento.</p></article>';
+      }
+    } catch (_) {
+      summaryEl.innerHTML = '<article class="panel"><p class="small-note">Falha ao carregar benchmark estratégico.</p></article>';
+      if (recEl) recEl.innerHTML = '';
+    }
+  }
+
   async function renderFinalStatus() {
     const box = document.getElementById('home-final-status');
     if (!box) return;
@@ -237,4 +270,5 @@
   renderLiveNews();
   renderSpaceMedia();
   renderFinalStatus();
+  renderBenchmarkSummary();
 })();

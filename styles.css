@@ -81,6 +81,7 @@ p { color: var(--muted); }
 .grid.five { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 .grid.six { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .grid.seven { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+.grid.one { grid-template-columns: 1fr; }
 .card, .character-card, .panel { background: linear-gradient(180deg, color-mix(in srgb, var(--card) 96%, white 4%), var(--card)); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem; box-shadow: 0 8px 30px rgba(3, 8, 24, 0.16); }
 .character-card img { width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 0.8rem; aspect-ratio: 3 / 4; object-fit: cover; }
 .link-card { text-decoration: none; display: block; }
@@ -291,3 +292,6 @@ p { color: var(--muted); }
 
 .section .small-note { margin-top: 0.3rem; }
 #home-final-status .panel { border-color: color-mix(in srgb, var(--accent) 35%, var(--border)); }
+
+#home-benchmark-summary .panel { min-height: 180px; }
+#home-benchmark-recommendations .panel { border-style: dashed; }

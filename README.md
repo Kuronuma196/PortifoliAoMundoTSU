@@ -104,6 +104,7 @@ Acesse `http://localhost:4173`.
 - **Fase 13 — Entrega contínua**: pipeline de validação automática, checklist de release e versionamento de mudanças.
 - **Fase 14 — Segurança aplicada**: endurecimento de acesso por perfil, trilha de auditoria e reforço de validações sensíveis.
 - **Fase 15 — Finalização de ciclo (FASE FINAL)**: estabilização final, revisão UX, checklist completo de publicação e fechamento do roadmap atual.
+- **Fase 16 — Evolução orientada por benchmark**: melhoria contínua com matriz inspirada em padrões de social/news, IA, institucional, business/doações e portfólio.
 
 ### Execução iniciada: Fase 8
 
@@ -154,3 +155,11 @@ Acesse `http://localhost:4173`.
 - `index.html` + `site.js` exibem painel final de progresso para acompanhamento de encerramento do roadmap.
 - `tests-smoke.js` valida também `/api/final/status` para garantir qualidade até o fechamento.
 - Referências de mercado consideradas: arquitetura de status/checklist inspirada em dashboards operacionais modernos (status page + release readiness).
+
+
+### Execução iniciada: Fase 16
+
+- `server.js` expõe `/api/benchmark/summary` com matriz de referência e recomendações para evolução full-stack.
+- `index.html` + `site.js` exibem benchmark estratégico e recomendações priorizadas na home.
+- `tests-smoke.js` valida o endpoint de benchmark para manter o ciclo de qualidade.
+- Investigação web foi tentada para ampliar referências, mas o ambiente possui bloqueio de proxy em alguns domínios externos; mantivemos base de padrões de mercado já consolidados em UX de portais.
