@@ -292,6 +292,60 @@ async function getSpaceMedia() {
 }
 
 
+function globalSearchIndex(query, typeFilter = 'all') {
+  const q = sanitizeText(query, 120).toLowerCase();
+  const type = sanitizeText(typeFilter, 30).toLowerCase();
+  const db = readDb();
+
+  const sources = [
+    ...(db.cmsArticles || []).map((item) => ({
+      type: 'article',
+      title: sanitizeText(item.title, 160),
+      summary: sanitizeText(item.content, 220),
+      category: sanitizeText(item.category, 80),
+      at: sanitizeText(item.at, 40),
+      url: '/cms.html',
+    })),
+    ...(db.newsSuggestions || []).map((item) => ({
+      type: 'news',
+      title: sanitizeText(item.title, 160),
+      summary: sanitizeText(item.summary, 220),
+      category: 'Comunidade',
+      at: sanitizeText(item.at, 40),
+      url: '/noticias.html',
+    })),
+    ...(db.creationJobs || []).map((item) => ({
+      type: 'creation',
+      title: `Criação ${sanitizeText(item.type, 40).toUpperCase()}`,
+      summary: sanitizeText(item.prompt, 220),
+      category: sanitizeText(item.type, 40),
+      at: sanitizeText(item.at, 40),
+      url: '/criacao.html',
+    })),
+    ...(db.roleRequests || []).map((item) => ({
+      type: 'marketplace',
+      title: sanitizeText(item.title, 160) || 'Solicitação',
+      summary: sanitizeText(item.description, 220),
+      category: sanitizeText(item.role, 80),
+      at: sanitizeText(item.at, 40),
+      url: '/painel.html',
+    })),
+  ];
+
+  const filteredByType = type === 'all' ? sources : sources.filter((item) => item.type === type);
+  const filteredByQuery = q
+    ? filteredByType.filter((item) => {
+        const hay = `${item.title} ${item.summary} ${item.category}`.toLowerCase();
+        return hay.includes(q);
+      })
+    : filteredByType;
+
+  return filteredByQuery
+    .slice(-200)
+    .reverse()
+    .map((item, idx) => ({ id: `res_${idx + 1}`, ...item }));
+}
+
 function architectureStatus() {
   return {
     phase: 20,
@@ -803,6 +857,20 @@ const server = http.createServer(async (req, res) => {
 
 
 
+
+
+  if (pathname === '/api/search' && req.method === 'GET') {
+    const q = sanitizeText(url.searchParams.get('q') || '', 120);
+    const type = sanitizeText(url.searchParams.get('type') || 'all', 30);
+    const items = globalSearchIndex(q, type);
+    return sendJson(res, 200, {
+      phase: 21,
+      query: q,
+      type,
+      total: items.length,
+      items: items.slice(0, 50),
+    });
+  }
 
   if (pathname === '/api/architecture/status' && req.method === 'GET') {
     return sendJson(res, 200, architectureStatus());

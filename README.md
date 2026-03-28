@@ -109,6 +109,16 @@ Acesse `http://localhost:4173`.
 - **Fase 18 — Prova social e confiança institucional**: painel de credibilidade com indicadores de comunidade, segurança e entregas.
 - **Fase 19 — Blueprint Full-Stack de nova geração**: arquitetura alvo com Next.js + API modular + dados transacionais para evolução do portal em escala.
 - **Fase 20 — Fundação arquitetural executável**: status técnico em tempo real para orientar migração de front/back/data/auth por marcos.
+- **Fase 21 — Busca unificada e descoberta**: search global com filtros por tipo para conteúdo/editorial/criação/marketplace.
+- **Fase 22 — Núcleo CMS + SEO avançado**: taxonomia forte, metadados e publicação orientada a descoberta.
+- **Fase 23 — Pipeline IA multimídia**: orquestração de provedores com filas, fallback e rastreabilidade.
+- **Fase 24 — Marketplace operacional**: perfis freelancer, propostas e mensageria interna.
+- **Fase 25 — Pagamentos e monetização**: Stripe/PayPal com webhooks e conciliação.
+- **Fase 26 — Observabilidade expandida**: SLOs, alertas e painéis de performance.
+- **Fase 27 — Segurança avançada**: hardening contínuo, trilhas e políticas de acesso finas.
+- **Fase 28 — Escala e performance**: cache, otimização de consultas e estratégias de CDN.
+- **Fase 29 — Go-live readiness**: checklist de release final, rollback e runbooks operacionais.
+- **Fase 30 — Fechamento do ciclo 2 (FASE FINAL)**: estabilização final, auditoria completa e encerramento oficial do ciclo evolutivo atual.
 
 ### Execução iniciada: Fase 8
 
@@ -199,3 +209,11 @@ Acesse `http://localhost:4173`.
 - `planejamento.html` + `planejamento.js` exibem painel dinâmico da arquitetura com marcos técnicos para o próximo ciclo.
 - `tests-smoke.js` valida o endpoint de arquitetura para assegurar consistência na execução do plano full-stack.
 - **Lembrete:** a Fase 15 foi a **FASE FINAL do ciclo anterior**; estamos no ciclo contínuo 16+.
+
+
+### Execução iniciada: Fase 21
+
+- `server.js` expõe `/api/search` com busca global e filtros por tipo (article/news/creation/marketplace).
+- `planejamento.html` + `planejamento.js` adicionam módulo interativo de busca para descoberta transversal do portal.
+- `tests-smoke.js` valida contrato do endpoint de busca para prevenir regressões.
+- **Lembrete de fase final:** a Fase 30 está definida como **FASE FINAL do ciclo 2**; a Fase 15 foi a final do ciclo anterior.

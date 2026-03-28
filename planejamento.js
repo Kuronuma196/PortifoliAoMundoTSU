@@ -8,6 +8,36 @@
       .replaceAll("'", '&#039;');
   }
 
+
+
+  async function runPlanningSearch() {
+    const qInput = document.getElementById('planning-search-q');
+    const typeInput = document.getElementById('planning-search-type');
+    const results = document.getElementById('planning-search-results');
+    const trigger = document.getElementById('planning-search-btn');
+    if (!qInput || !typeInput || !results || !trigger) return;
+
+    const execute = async () => {
+      const q = qInput.value.trim();
+      const type = typeInput.value;
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(q)}&type=${encodeURIComponent(type)}`);
+        if (!response.ok) throw new Error('planning_search_failed');
+        const data = await response.json();
+        const items = Array.isArray(data?.items) ? data.items : [];
+        results.innerHTML = items.length
+          ? items
+              .map((item) => `<article class="panel"><p class="meta">${escapeHtml(item.type)} • ${escapeHtml(item.category || '')}</p><h3>${escapeHtml(item.title || 'Resultado')}</h3><p>${escapeHtml(item.summary || '')}</p><p class="small-note">${item.at ? new Date(item.at).toLocaleString() : ''}</p><a class="button ghost" href="${escapeHtml(item.url || '/index.html')}">Abrir</a></article>`)
+              .join('')
+          : '<article class="panel"><p class="small-note">Nenhum resultado encontrado.</p></article>';
+      } catch (_) {
+        results.innerHTML = '<article class="panel"><p class="small-note">Falha ao executar busca.</p></article>';
+      }
+    };
+
+    trigger.addEventListener('click', execute);
+  }
+
   async function renderArchitectureStatus() {
     const cards = document.getElementById('architecture-status-cards');
     const milestones = document.getElementById('architecture-milestones');
@@ -44,4 +74,5 @@
   }
 
   renderArchitectureStatus();
+  runPlanningSearch();
 })();
